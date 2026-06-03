@@ -3,6 +3,38 @@ $page_title = "Cafes - FoodFinder Karachi";
 include 'config/database.php';
 $conn = getConnection();
 
+$favoriteAdded = false;
+$favoriteRemoved = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['favorite_action'], $_POST['cafe_id'])) {
+    $cafeId = intval($_POST['cafe_id']);
+
+    if ($_POST['favorite_action'] === 'add') {
+        $itemStmt = $conn->prepare("SELECT * FROM cafes WHERE id = ?");
+        $itemStmt->bind_param('i', $cafeId);
+        $itemStmt->execute();
+        $itemResult = $itemStmt->get_result();
+        $itemRow = $itemResult->fetch_assoc();
+        if ($itemRow) {
+            addFavoriteItem('cafe', $itemRow['id'], [
+                'name' => $itemRow['name'],
+                'url' => 'cafe.php?id=' . $itemRow['id'],
+                'subtitle' => $itemRow['coffee_types'] . ' · ' . $itemRow['location']
+            ]);
+        }
+        $itemStmt->close();
+        $favoriteAdded = true;
+    }
+
+    if ($_POST['favorite_action'] === 'remove') {
+        removeFavoriteItem('cafe', $cafeId);
+        $favoriteRemoved = true;
+    }
+
+    $redirectUrl = 'cafes.php' . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '');
+    header('Location: ' . $redirectUrl);
+    exit();
+}
+
 $search = $_GET['search'] ?? '';
 $location = $_GET['location'] ?? '';
 $coffee = $_GET['coffee'] ?? '';
@@ -135,7 +167,15 @@ while ($row = $locResult->fetch_assoc()) {
                                     <p class="small text-secondary mb-2"><?php echo htmlspecialchars($cafe['coffee_types']); ?></p>
                                     <p class="small mb-2"><i class="fas fa-map-marker-alt"></i> <?php echo htmlspecialchars($cafe['location']); ?></p>
                                     <p class="small mb-3"><?php echo htmlspecialchars($cafe['opening_hours']); ?></p>
-                                    <a href="cafe.php?id=<?php echo $cafe['id']; ?>" class="btn btn-gold w-100">View Details</a>
+                                    <form method="POST" class="mb-3">
+                                        <input type="hidden" name="cafe_id" value="<?php echo intval($cafe['id']); ?>">
+                                        <?php if (isFavoriteItem('cafe', $cafe['id'])): ?>
+                                            <button type="submit" name="favorite_action" value="remove" class="btn btn-outline-gold w-100 mb-2">Remove Favorite</button>
+                                        <?php else: ?>
+                                            <button type="submit" name="favorite_action" value="add" class="btn btn-gold w-100 mb-2">Add Favorite</button>
+                                        <?php endif; ?>
+                                    </form>
+                                    <a href="cafe.php?id=<?php echo $cafe['id']; ?>" class="btn btn-outline-gold w-100">View Details</a>
                                 </div>
                             </div>
                         </div>

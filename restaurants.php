@@ -3,6 +3,38 @@ $page_title = "Restaurants - FoodFinder Karachi";
 include 'config/database.php';
 $conn = getConnection();
 
+$favoriteAdded = false;
+$favoriteRemoved = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['favorite_action'], $_POST['restaurant_id'])) {
+    $restaurantId = intval($_POST['restaurant_id']);
+
+    if ($_POST['favorite_action'] === 'add') {
+        $itemStmt = $conn->prepare("SELECT * FROM restaurants WHERE id = ?");
+        $itemStmt->bind_param('i', $restaurantId);
+        $itemStmt->execute();
+        $itemResult = $itemStmt->get_result();
+        $itemRow = $itemResult->fetch_assoc();
+        if ($itemRow) {
+            addFavoriteItem('restaurant', $itemRow['id'], [
+                'name' => $itemRow['name'],
+                'url' => 'restaurant.php?id=' . $itemRow['id'],
+                'subtitle' => $itemRow['cuisine'] . ' · ' . $itemRow['location']
+            ]);
+        }
+        $itemStmt->close();
+        $favoriteAdded = true;
+    }
+
+    if ($_POST['favorite_action'] === 'remove') {
+        removeFavoriteItem('restaurant', $restaurantId);
+        $favoriteRemoved = true;
+    }
+
+    $redirectUrl = 'restaurants.php' . (!empty($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : '');
+    header('Location: ' . $redirectUrl);
+    exit();
+}
+
 $search = $_GET['search'] ?? '';
 $location = $_GET['location'] ?? '';
 $cuisine = $_GET['cuisine'] ?? '';
@@ -165,8 +197,17 @@ while ($row = $locResult->fetch_assoc()) {
                                         <?php echo htmlspecialchars($restaurant['price_range']); ?>
                                     </p>
 
+                                    <form method="POST" class="mb-3">
+                                        <input type="hidden" name="restaurant_id" value="<?php echo intval($restaurant['id']); ?>">
+                                        <?php if (isFavoriteItem('restaurant', $restaurant['id'])): ?>
+                                            <button type="submit" name="favorite_action" value="remove" class="btn btn-outline-gold w-100 mb-2">Remove Favorite</button>
+                                        <?php else: ?>
+                                            <button type="submit" name="favorite_action" value="add" class="btn btn-gold w-100 mb-2">Add Favorite</button>
+                                        <?php endif; ?>
+                                    </form>
+
                                     <a href="restaurant.php?id=<?php echo $restaurant['id']; ?>"
-                                        class="btn btn-gold w-100">
+                                        class="btn btn-outline-gold w-100">
                                         View Details
                                     </a>
                                 </div>
