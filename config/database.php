@@ -81,4 +81,30 @@ function getRecentReviews($conn, $limit = 6) {
     }
     return $reviews;
 }
+
+function initializeFavorites() {
+    if (!isset($_SESSION['favorites'])) {
+        $_SESSION['favorites'] = [];
+    }
+}
+
+function getFavoriteItems() {
+    initializeFavorites();
+    return $_SESSION['favorites'];
+}
+
+function addFavoriteItem($type, $id, $data) {
+    initializeFavorites();
+    $_SESSION['favorites'][$type . ':' . $id] = array_merge(['type' => $type, 'id' => $id], $data);
+}
+
+function removeFavoriteItem($type, $id) {
+    initializeFavorites();
+    unset($_SESSION['favorites'][$type . ':' . $id]);
+}
+
+function isFavoriteItem($type, $id) {
+    initializeFavorites();
+    return isset($_SESSION['favorites'][$type . ':' . $id]);
+}
 ?>

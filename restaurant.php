@@ -18,6 +18,25 @@ if (!$restaurant) {
     header('Location: restaurants.php');
     exit();
 }
+
+$favoriteAdded = false;
+$favoriteRemoved = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['favorite_action'])) {
+    if ($_POST['favorite_action'] === 'add') {
+        addFavoriteItem('restaurant', $restaurant['id'], [
+            'name' => $restaurant['name'],
+            'url' => 'restaurant.php?id=' . $restaurant['id'],
+            'subtitle' => $restaurant['cuisine'] . ' · ' . $restaurant['location']
+        ]);
+        $favoriteAdded = true;
+    }
+    if ($_POST['favorite_action'] === 'remove') {
+        removeFavoriteItem('restaurant', $restaurant['id']);
+        $favoriteRemoved = true;
+    }
+}
+
+$isFavorite = isFavoriteItem('restaurant', $restaurant['id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,8 +118,20 @@ if (!$restaurant) {
             </div>
             <div class="col-lg-4">
                 <div class="glass-card p-4">
+                    <?php if ($favoriteAdded): ?>
+                        <div class="alert alert-success">Added to favorites.</div>
+                    <?php elseif ($favoriteRemoved): ?>
+                        <div class="alert alert-warning">Removed from favorites.</div>
+                    <?php endif; ?>
                     <h5>Quick Actions</h5>
                     <p class="text-secondary mb-3">Plan your visit or explore more top venues in Karachi.</p>
+                    <form method="POST" class="mb-3">
+                        <?php if ($isFavorite): ?>
+                            <button type="submit" name="favorite_action" value="remove" class="btn btn-outline-gold w-100 mb-2">Remove from Favorites</button>
+                        <?php else: ?>
+                            <button type="submit" name="favorite_action" value="add" class="btn btn-gold w-100 mb-2">Add to Favorites</button>
+                        <?php endif; ?>
+                    </form>
                     <a href="restaurants.php" class="btn btn-outline-gold w-100 mb-2">Back to Restaurants</a>
                     <a href="contact.php" class="btn btn-gold w-100">Need Help?</a>
                 </div>

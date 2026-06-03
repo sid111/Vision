@@ -18,6 +18,25 @@ if (!$cafe) {
     header('Location: cafes.php');
     exit();
 }
+
+$favoriteAdded = false;
+$favoriteRemoved = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['favorite_action'])) {
+    if ($_POST['favorite_action'] === 'add') {
+        addFavoriteItem('cafe', $cafe['id'], [
+            'name' => $cafe['name'],
+            'url' => 'cafe.php?id=' . $cafe['id'],
+            'subtitle' => $cafe['coffee_types'] . ' · ' . $cafe['location']
+        ]);
+        $favoriteAdded = true;
+    }
+    if ($_POST['favorite_action'] === 'remove') {
+        removeFavoriteItem('cafe', $cafe['id']);
+        $favoriteRemoved = true;
+    }
+}
+
+$isFavorite = isFavoriteItem('cafe', $cafe['id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,8 +118,20 @@ if (!$cafe) {
             </div>
             <div class="col-lg-4">
                 <div class="glass-card p-4">
+                    <?php if ($favoriteAdded): ?>
+                        <div class="alert alert-success">Added to favorites.</div>
+                    <?php elseif ($favoriteRemoved): ?>
+                        <div class="alert alert-warning">Removed from favorites.</div>
+                    <?php endif; ?>
                     <h5>Quick Actions</h5>
                     <p class="text-secondary mb-3">Explore more cafes or get directions to this spot.</p>
+                    <form method="POST" class="mb-3">
+                        <?php if ($isFavorite): ?>
+                            <button type="submit" name="favorite_action" value="remove" class="btn btn-outline-gold w-100 mb-2">Remove from Favorites</button>
+                        <?php else: ?>
+                            <button type="submit" name="favorite_action" value="add" class="btn btn-gold w-100 mb-2">Add to Favorites</button>
+                        <?php endif; ?>
+                    </form>
                     <a href="cafes.php" class="btn btn-outline-gold w-100 mb-2">Back to Cafes</a>
                     <a href="contact.php" class="btn btn-gold w-100">Ask for a Recommendation</a>
                 </div>
