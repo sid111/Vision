@@ -11,7 +11,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Create connection function
-function getConnection() {
+function getConnection()
+{
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
     if ($conn->connect_error) {
@@ -26,7 +27,8 @@ function getConnection() {
 // Base URL (update if your local setup differs)
 define('BASE_URL', 'http://localhost/Vision/');
 
-function ensureDatabaseSchema($conn) {
+function ensureDatabaseSchema($conn)
+{
     $conn->query("CREATE TABLE IF NOT EXISTS users (
         id INT PRIMARY KEY AUTO_INCREMENT,
         name VARCHAR(100) NOT NULL,
@@ -125,7 +127,8 @@ function ensureDatabaseSchema($conn) {
     refreshSiteStats($conn);
 }
 
-function ensureDefaultAdmin($conn) {
+function ensureDefaultAdmin($conn)
+{
     $email = 'admin@vision.com';
     $hashedPassword = password_hash('admin123', PASSWORD_DEFAULT);
     $name = 'Default Admin';
@@ -150,7 +153,8 @@ function ensureDefaultAdmin($conn) {
     $stmt->close();
 }
 
-function ensureDefaultLocations($conn) {
+function ensureDefaultLocations($conn)
+{
     $defaultLocations = ['Karachi', 'Clifton', 'DHA', 'Gulshan', 'Do Darya', 'Bahadurabad', 'Zamzama'];
     foreach ($defaultLocations as $location) {
         $stmt = $conn->prepare("INSERT IGNORE INTO locations (name) VALUES (?)");
@@ -160,7 +164,8 @@ function ensureDefaultLocations($conn) {
     }
 }
 
-function refreshSiteStats($conn) {
+function refreshSiteStats($conn)
+{
     $conn->query("INSERT INTO site_stats (total_restaurants, total_cafes, total_users, total_reviews)
         SELECT (SELECT COUNT(*) FROM restaurants), (SELECT COUNT(*) FROM cafes), (SELECT COUNT(*) FROM users), (SELECT COUNT(*) FROM reviews)
         WHERE NOT EXISTS (SELECT 1 FROM site_stats)");
@@ -172,7 +177,8 @@ function refreshSiteStats($conn) {
         updated_at = CURRENT_TIMESTAMP WHERE id = 1");
 }
 
-function getCurrentUser() {
+function getCurrentUser()
+{
     if (empty($_SESSION['user_id'])) {
         return null;
     }
@@ -192,23 +198,27 @@ function getCurrentUser() {
     return $user;
 }
 
-function isLoggedIn() {
+function isLoggedIn()
+{
     return !empty($_SESSION['user_id']);
 }
 
-function isAdmin() {
+function isAdmin()
+{
     $user = getCurrentUser();
     return $user && $user['role'] === 'admin';
 }
 
-function requireLogin($redirect = 'login.php') {
+function requireLogin($redirect = 'login.php')
+{
     if (!isLoggedIn()) {
         header('Location: ' . $redirect);
         exit();
     }
 }
 
-function requireAdmin($redirect = 'index.php') {
+function requireAdmin($redirect = 'index.php')
+{
     if (!isAdmin()) {
         header('Location: ' . $redirect);
         exit();
@@ -216,7 +226,8 @@ function requireAdmin($redirect = 'index.php') {
 }
 
 // Function to get dynamic stats
-function getSiteStats($conn) {
+function getSiteStats($conn)
+{
     $result = $conn->query("SELECT total_restaurants, total_cafes, total_users, total_reviews FROM site_stats LIMIT 1");
     if ($result && $result->num_rows > 0) {
         return $result->fetch_assoc();
@@ -225,7 +236,8 @@ function getSiteStats($conn) {
 }
 
 // Function to get featured restaurants
-function getFeaturedRestaurants($conn, $limit = 4) {
+function getFeaturedRestaurants($conn, $limit = 4)
+{
     $result = $conn->query("SELECT * FROM restaurants WHERE featured = 1 ORDER BY rating DESC LIMIT $limit");
     $restaurants = [];
     while ($row = $result->fetch_assoc()) {
@@ -235,7 +247,8 @@ function getFeaturedRestaurants($conn, $limit = 4) {
 }
 
 // Function to get featured cafes
-function getFeaturedCafes($conn, $limit = 4) {
+function getFeaturedCafes($conn, $limit = 4)
+{
     $result = $conn->query("SELECT * FROM cafes WHERE featured = 1 ORDER BY rating DESC LIMIT $limit");
     $cafes = [];
     while ($row = $result->fetch_assoc()) {
@@ -245,7 +258,8 @@ function getFeaturedCafes($conn, $limit = 4) {
 }
 
 // Function to get all food streets
-function getFoodStreets($conn) {
+function getFoodStreets($conn)
+{
     $result = $conn->query("SELECT * FROM food_streets ORDER BY rating DESC");
     $streets = [];
     while ($row = $result->fetch_assoc()) {
@@ -255,7 +269,8 @@ function getFoodStreets($conn) {
 }
 
 // Function to get recent reviews
-function getRecentReviews($conn, $limit = 6) {
+function getRecentReviews($conn, $limit = 6)
+{
     $query = "SELECT r.*, u.name as user_name,
               CASE
                 WHEN r.restaurant_id IS NOT NULL THEN (SELECT name FROM restaurants WHERE id = r.restaurant_id)
@@ -272,7 +287,8 @@ function getRecentReviews($conn, $limit = 6) {
     return $reviews;
 }
 
-function getLocations($conn) {
+function getLocations($conn)
+{
     $result = $conn->query("SELECT name FROM locations ORDER BY name");
     $locations = [];
     while ($row = $result->fetch_assoc()) {
@@ -281,13 +297,15 @@ function getLocations($conn) {
     return $locations;
 }
 
-function initializeFavorites() {
+function initializeFavorites()
+{
     if (!isset($_SESSION['favorites'])) {
         $_SESSION['favorites'] = [];
     }
 }
 
-function getFavoriteItems() {
+function getFavoriteItems()
+{
     global $conn;
     if (isLoggedIn()) {
         $stmt = $conn->prepare("SELECT item_type as type, item_id as id, name, url, subtitle FROM favorites WHERE user_id = ? ORDER BY created_at DESC");
@@ -306,7 +324,8 @@ function getFavoriteItems() {
     return array_values($_SESSION['favorites']);
 }
 
-function addFavoriteItem($type, $id, $data) {
+function addFavoriteItem($type, $id, $data)
+{
     global $conn;
     $type = strtolower($type);
     $id = intval($id);
@@ -325,7 +344,8 @@ function addFavoriteItem($type, $id, $data) {
     $_SESSION['favorites'][$type . ':' . $id] = array_merge(['type' => $type, 'id' => $id], $data);
 }
 
-function removeFavoriteItem($type, $id) {
+function removeFavoriteItem($type, $id)
+{
     global $conn;
     $type = strtolower($type);
     $id = intval($id);
@@ -342,7 +362,8 @@ function removeFavoriteItem($type, $id) {
     unset($_SESSION['favorites'][$type . ':' . $id]);
 }
 
-function isFavoriteItem($type, $id) {
+function isFavoriteItem($type, $id)
+{
     global $conn;
     $type = strtolower($type);
     $id = intval($id);
@@ -360,4 +381,3 @@ function isFavoriteItem($type, $id) {
     initializeFavorites();
     return isset($_SESSION['favorites'][$type . ':' . $id]);
 }
-?>

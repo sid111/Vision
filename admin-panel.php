@@ -7,7 +7,8 @@ requireAdmin();
 $message = '';
 $messageType = '';
 
-function sanitizeText($value) {
+function sanitizeText($value)
+{
     return trim((string) $value);
 }
 
@@ -197,6 +198,7 @@ $stats = getSiteStats($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -204,6 +206,7 @@ $stats = getSiteStats($conn);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
 </head>
+
 <body>
     <?php include 'includes/nav.php'; ?>
     <div style="height: 76px;"></div>
@@ -272,7 +275,13 @@ $stats = getSiteStats($conn);
                     </form>
                     <div class="table-responsive mt-4">
                         <table class="table table-dark table-striped">
-                            <thead><tr><th>Name</th><th>Location</th><th>Actions</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <?php while ($row = $restaurants->fetch_assoc()): ?>
                                     <tr>
@@ -316,7 +325,13 @@ $stats = getSiteStats($conn);
                     </form>
                     <div class="table-responsive mt-4">
                         <table class="table table-dark table-striped">
-                            <thead><tr><th>Name</th><th>Location</th><th>Actions</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <?php while ($row = $cafes->fetch_assoc()): ?>
                                     <tr>
@@ -358,7 +373,13 @@ $stats = getSiteStats($conn);
                     </form>
                     <div class="table-responsive mt-4">
                         <table class="table table-dark table-striped">
-                            <thead><tr><th>Name</th><th>Location</th><th>Actions</th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <?php while ($row = $streets->fetch_assoc()): ?>
                                     <tr>
@@ -409,4 +430,5 @@ $stats = getSiteStats($conn);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
