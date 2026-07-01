@@ -88,29 +88,7 @@ $recentReviews = getRecentReviews($conn);
 </head>
 <body>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="index.php">FoodFinder<span style="color:#F5B041;"> Karachi</span></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link active" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="restaurants.php">Restaurants</a></li>
-                <li class="nav-item"><a class="nav-link" href="cafes.php">Cafes</a></li>
-                <li class="nav-item"><a class="nav-link" href="food-streets.php">Food Streets</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-                <li class="nav-item"><a class="nav-link" href="favorites.php">Favorites</a></li>
-            </ul>
-            <div class="d-flex">
-                <a href="login.php" class="btn btn-outline-gold me-2">Login</a>
-                <a href="signup.php" class="btn btn-gold">Sign Up</a>
-            </div>
-        </div>
-    </div>
-</nav>
+<?php include 'includes/nav.php'; ?>
 
 <div style="height: 76px;"></div>
 

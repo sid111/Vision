@@ -50,25 +50,7 @@ $isFavorite = isFavoriteItem('food_street', $street['id']);
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="index.php">FoodFinder Karachi</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="restaurants.php">Restaurants</a></li>
-                <li class="nav-item"><a class="nav-link" href="cafes.php">Cafes</a></li>
-                <li class="nav-item"><a class="nav-link active" href="food-streets.php">Food Streets</a></li>
-                <li class="nav-item"><a class="nav-link" href="favorites.php">Favorites</a></li>
-                <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<?php include 'includes/nav.php'; ?>
 
 <div style="height:76px"></div>
 <section class="detail-hero" style="background-image: url('<?php echo !empty($street['image']) ? htmlspecialchars($street['image']) : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600'; ?>');">

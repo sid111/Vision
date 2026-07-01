@@ -380,6 +380,23 @@ footer small {
     }
 }
 
+.auth-card {
+    border-radius: 24px;
+}
+
+.text-gold {
+    color: var(--gold);
+}
+
+.table-dark {
+    background: rgba(17, 22, 29, 0.95);
+}
+
+.table-dark th,
+.table-dark td {
+    border-color: rgba(245, 176, 65, 0.15);
+}
+
 @media (max-width: 992px) {
     .hero {
         background-attachment: scroll;
