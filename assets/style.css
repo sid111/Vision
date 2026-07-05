@@ -54,6 +54,54 @@ img {
     transition: 0.2s;
 }
 
+.nav-auth-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.nav-auth-actions .btn,
+.nav-auth-actions .text-light {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        padding-top: 0.75rem;
+    }
+
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .nav-auth-actions {
+        justify-content: center;
+        margin-top: 0.75rem;
+        width: 100%;
+    }
+
+    .nav-auth-actions .btn,
+    .nav-auth-actions .text-light {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-brand {
+        font-size: 1.4rem;
+    }
+
+    .nav-link {
+        margin: 0.15rem 0;
+    }
+
+    .nav-auth-actions {
+        gap: 0.5rem !important;
+    }
+}
+
 .nav-link:hover,
 .nav-link.active {
     color: var(--gold) !important;

@@ -18,9 +18,10 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                 <li class="nav-item"><a class="nav-link <?php echo $currentPage === 'about.php' ? 'active' : ''; ?>" href="about.php">About</a></li>
                 <li class="nav-item"><a class="nav-link <?php echo $currentPage === 'contact.php' ? 'active' : ''; ?>" href="contact.php">Contact</a></li>
             </ul>
-            <div class="d-flex align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2 nav-auth-actions">
                 <?php if ($user): ?>
-                    <span class="text-light small me-2">Hi, <?php echo htmlspecialchars($user['name']); ?></span>
+                    <?php $displayName = ($user['role'] === 'admin') ? 'Admin' : $user['name']; ?>
+                    <span class="text-light small me-2">Hi, <?php echo htmlspecialchars($displayName); ?></span>
                     <?php if ($user['role'] === 'admin'): ?>
                         <a href="admin-panel.php" class="btn btn-outline-gold btn-sm">Admin</a>
                     <?php endif; ?>
