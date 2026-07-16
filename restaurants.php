@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 $page_title = "Restaurants - FoodFinder Karachi";
 include 'config/database.php';
 $conn = getConnection();
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['favorite_action'], $_
             addFavoriteItem('restaurant', $itemRow['id'], [
                 'name' => $itemRow['name'],
                 'url' => 'restaurant.php?id=' . $itemRow['id'],
-                'subtitle' => $itemRow['cuisine'] . ' · ' . $itemRow['location']
+                'subtitle' => $itemRow['cuisine'] . ' Â· ' . $itemRow['location']
             ]);
         }
         $itemStmt->close();
@@ -91,7 +91,7 @@ while ($row = $locResult->fetch_assoc()) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/style.css?v=20260712">
 </head>
 
 <body>
@@ -156,9 +156,7 @@ while ($row = $locResult->fetch_assoc()) {
                         <div class="col-md-6 col-xl-4">
                             <div class="glass-card restaurant-card">
 
-                                <div class="restaurant-image">
-                                    <i class="fas fa-utensils"></i>
-                                </div>
+                                <div class="restaurant-image" style="background-image: url('<?php echo !empty($restaurant['image']) ? htmlspecialchars($restaurant['image'], ENT_QUOTES) : 'https://images.unsplash.com/photo-1529205274511-6f7d5a6d8f30?w=1200'; ?>'); background-size: cover; background-position: center;"></div>
 
                                 <div class="p-3">
                                     <h5><?php echo htmlspecialchars($restaurant['name']); ?></h5>
@@ -183,7 +181,7 @@ while ($row = $locResult->fetch_assoc()) {
 
                                     <form method="POST" class="mb-3">
                                         <input type="hidden" name="restaurant_id" value="<?php echo intval($restaurant['id']); ?>">
-                                        <?php if (isFavoriteItem('restaurant', $restaurant['id'])): ?>
+        kolachi       <?php if (isFavoriteItem('restaurant', $restaurant['id'])): ?>
                                             <button type="submit" name="favorite_action" value="remove" class="btn btn-outline-gold w-100 mb-2">Remove Favorite</button>
                                         <?php else: ?>
                                             <button type="submit" name="favorite_action" value="add" class="btn btn-gold w-100 mb-2">Add Favorite</button>

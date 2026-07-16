@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jul 02, 2026 at 07:16 PM
+-- Generation Time: Jul 05, 2026 at 10:48 AM
 -- Server version: 8.4.3
 -- PHP Version: 8.3.28
 
@@ -40,7 +40,7 @@ CREATE TABLE `cafes` (
   `image` varchar(255) DEFAULT NULL,
   `featured` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `cafes`
@@ -71,7 +71,7 @@ CREATE TABLE `favorites` (
   `url` varchar(255) NOT NULL,
   `subtitle` varchar(255) DEFAULT '',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE `food_streets` (
   `image` varchar(255) DEFAULT NULL,
   `rating` decimal(2,1) DEFAULT '0.0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `food_streets`
@@ -112,7 +112,7 @@ CREATE TABLE `locations` (
   `id` int NOT NULL,
   `name` varchar(100) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `locations`
@@ -147,7 +147,7 @@ CREATE TABLE `restaurants` (
   `image` varchar(255) DEFAULT NULL,
   `featured` tinyint(1) DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `restaurants`
@@ -205,14 +205,14 @@ CREATE TABLE `site_stats` (
   `total_users` int DEFAULT '0',
   `total_reviews` int DEFAULT '0',
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `site_stats`
 --
 
 INSERT INTO `site_stats` (`id`, `total_restaurants`, `total_cafes`, `total_users`, `total_reviews`, `updated_at`) VALUES
-(1, 5, 8, 6, 10, '2026-07-02 19:12:14');
+(1, 5, 8, 6, 10, '2026-07-05 10:48:00');
 
 -- --------------------------------------------------------
 
@@ -228,7 +228,7 @@ CREATE TABLE `users` (
   `profile_image` varchar(255) DEFAULT 'default-avatar.png',
   `role` enum('user','admin') DEFAULT 'user',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
@@ -239,7 +239,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `profile_image`, `role`,
 (2, 'Ali Raza', 'ali@example.com', '$2y$10$YourHashedPasswordHere', 'default-avatar.png', 'user', '2026-06-03 21:10:05'),
 (3, 'Sana Khan', 'sana@example.com', '$2y$10$YourHashedPasswordHere', 'default-avatar.png', 'user', '2026-06-03 21:10:05'),
 (4, 'Ayisha Khan', 'ayisha@example.com', '$2y$10$YourHashedPasswordHere', 'default-avatar.png', 'user', '2026-06-03 21:10:05'),
-(5, 'Default Admin', 'admin@vision.com', '$2y$10$Vj3IIvKNcKdWroajWc3Ya.VDiRhBXG/gpM4vNWF./hLOKGZlEwZOC', 'default-avatar.png', 'admin', '2026-07-01 10:40:51'),
+(5, 'Default Admin', 'admin@vision.com', '$2y$10$hnM1pv3gUxQxXyabXzd4wu0pEhaz7LuCAo0GSvrPimZR9owU3V/j.', 'default-avatar.png', 'admin', '2026-07-01 10:40:51'),
 (6, 'Shaaz', 'shaaz@vision.com', '$2y$10$A89Y0qGkMSQsSzuJyPDk4e/HXpvuN87t1GB3eQVelpbT5bndGrKIq', 'default-avatar.png', 'user', '2026-07-01 20:17:43');
 
 --
@@ -326,7 +326,7 @@ ALTER TABLE `food_streets`
 -- AUTO_INCREMENT for table `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=561;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=659;
 
 --
 -- AUTO_INCREMENT for table `restaurants`

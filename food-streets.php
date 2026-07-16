@@ -1,6 +1,7 @@
-<?php
+﻿<?php
 $page_title = "Food Streets - FoodFinder Karachi";
 include 'config/database.php';
+include 'includes/food-catalog.php';
 $conn = getConnection();
 
 $favoriteAdded = false;
@@ -43,7 +44,7 @@ $foodStreets = getFoodStreets($conn);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/style.css?v=20260712">
 </head>
 
 <body>
@@ -65,9 +66,10 @@ $foodStreets = getFoodStreets($conn);
                 </div>
             <?php else: ?>
                 <?php foreach ($foodStreets as $street): ?>
+                    <?php $streetCatalog = ff_get_street_catalog($street['name'], $street['location']); ?>
                     <div class="col-md-6 col-xl-4">
                         <div class="glass-card place-card">
-                            <div class="restaurant-image" style="background-image: url('<?php echo !empty($street['image']) ? htmlspecialchars($street['image']) : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200'; ?>'); background-size: cover; background-position: center;"></div>
+                            <div class="restaurant-image" style="background-image: url('<?php echo htmlspecialchars($streetCatalog['hero_image'], ENT_QUOTES); ?>'); background-size: cover; background-position: center;"></div>
                             <div class="p-3">
                                 <h5><?php echo htmlspecialchars($street['name']); ?></h5>
                                 <div class="rating mb-2"><i class="fas fa-star"></i> <?php echo number_format($street['rating'], 1); ?></div>
