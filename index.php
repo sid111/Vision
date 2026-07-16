@@ -91,7 +91,7 @@ $locations = getLocations($conn);
 
 <body class="vision-page">
 
-     <?php include 'includes/nav.php'; ?>
+    <?php include 'includes/nav.php'; ?>
 
     <div style="height: 76px;"></div>
 

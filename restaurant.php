@@ -112,11 +112,13 @@ $heroImage = $placeCatalog['hero_image'];
 $locationImage = $placeCatalog['location_image'] ?? $heroImage;
 $galleryImages = !empty($placeCatalog['gallery_images']) ? $placeCatalog['gallery_images'] : $galleryImages;
 $menuItems = !empty($placeCatalog['menu_items']) ? $placeCatalog['menu_items'] : $menuItems;
-$menuTabs = array_map(function ($item) { return $item['tag']; }, $menuItems);
+$menuTabs = array_map(function ($item) {
+    return $item['tag'];
+}, $menuItems);
 $restaurantSummary = $placeCatalog['summary'];
 
 $reviews = [];
-$reviewStmt = $conn->prepare("SELECT r.rating, r.comment, r.created_at, u.name AS user_name FROM reviews r JOIN users u ON r.user_id = u.id WHERE r.restaurant_id = ? ORDER BY r.created_at DESC LIMIT 3");
+$reviewStmt = $conn->prepare("SELECT r.rating, r.comment, r.created_at, COALESCE(u.name, 'Guest') AS user_name FROM reviews r LEFT JOIN users u ON r.user_id = u.id WHERE r.restaurant_id = ? ORDER BY r.created_at DESC LIMIT 3");
 $reviewStmt->bind_param('i', $id);
 $reviewStmt->execute();
 $reviewResult = $reviewStmt->get_result();
@@ -124,6 +126,8 @@ while ($review = $reviewResult->fetch_assoc()) {
     $reviews[] = $review;
 }
 $reviewStmt->close();
+
+$reviewSubmitted = isset($_GET['review_submitted']);
 
 if (empty($reviews)) {
     $reviews = [
@@ -346,7 +350,7 @@ function foodSlug($text)
             padding: 1.25rem;
         }
 
-        .rd-panel + .rd-panel {
+        .rd-panel+.rd-panel {
             margin-top: 1rem;
         }
 
@@ -644,6 +648,7 @@ function foodSlug($text)
         }
 
         @media (max-width: 1199px) {
+
             .rd-menu-grid,
             .rd-similar-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -853,10 +858,13 @@ function foodSlug($text)
 
                     <div class="rd-panel">
                         <h2 class="rd-panel-title">Customer Reviews</h2>
-                        <div class="d-flex align-items-center justify-content-between mb-3">
+                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
                             <span style="color: var(--rd-gold); font-weight: 800;"><i class="fas fa-star"></i> <?php echo number_format($restaurant['rating'], 1); ?> average</span>
-                            <a href="contact.php" class="rd-soft-link">Write Review</a>
+                            <a href="review.php?type=restaurant&id=<?php echo intval($restaurant['id']); ?>" class="rd-soft-link">Write Review</a>
                         </div>
+                        <?php if (!empty($reviewSubmitted)): ?>
+                            <div class="alert alert-success">Thank you! Your review has been posted.</div>
+                        <?php endif; ?>
                         <div class="rd-review-list">
                             <?php foreach ($reviews as $review): ?>
                                 <div class="rd-review-line">
@@ -910,5 +918,3 @@ function foodSlug($text)
 $stmt->close();
 $conn->close();
 ?>
-
-

@@ -289,8 +289,24 @@ img {
 .restaurant-card {
     position: relative;
     overflow: hidden;
-    min-height: 240px;
+    min-height: 260px;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.food-street-card .p-3,
+.place-card .p-3,
+.restaurant-card .p-3 {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.food-street-card .p-3 > .mt-auto,
+.place-card .p-3 > .mt-auto,
+.restaurant-card .p-3 > .mt-auto {
+    margin-top: auto;
 }
 
 .review-card {

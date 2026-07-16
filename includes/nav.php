@@ -135,6 +135,16 @@ $foodStreetPages = ['food-streets.php', 'food-street.php'];
             border-radius: 10px;
         }
 
+        .vision-site-nav .navbar-nav {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .vision-site-nav .nav-item {
+            width: 100%;
+            text-align: center;
+        }
+
         .vision-site-nav .nav-link {
             margin: 0;
             padding: 0.72rem 0;
@@ -148,8 +158,9 @@ $foodStreetPages = ['food-streets.php', 'food-street.php'];
         }
 
         .vision-site-nav .nav-auth-actions {
-            justify-content: flex-start;
+            justify-content: center;
             margin-top: 0.8rem;
+            width: 100%;
         }
     }
 </style>

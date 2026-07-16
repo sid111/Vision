@@ -74,6 +74,32 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
+$cafes = [];
+if (!empty($location)) {
+    $cafeSql = "SELECT * FROM cafes WHERE location = ?";
+    $cafeParams = [$location];
+    $cafeTypes = 's';
+
+    if (!empty($search)) {
+        $cafeSql .= " AND (name LIKE ? OR description LIKE ? OR coffee_types LIKE ? OR location LIKE ?)";
+        $like = "%$search%";
+        $cafeParams[] = $like;
+        $cafeParams[] = $like;
+        $cafeParams[] = $like;
+        $cafeParams[] = $like;
+        $cafeTypes .= 'ssss';
+    }
+    $cafeSql .= " ORDER BY rating DESC";
+    $cafeStmt = $conn->prepare($cafeSql);
+    $cafeStmt->bind_param($cafeTypes, ...$cafeParams);
+    $cafeStmt->execute();
+    $cafeResult = $cafeStmt->get_result();
+    while ($cafeRow = $cafeResult->fetch_assoc()) {
+        $cafes[] = $cafeRow;
+    }
+    $cafeStmt->close();
+}
+
 $locations = [];
 $locResult = $conn->query("SELECT DISTINCT location FROM restaurants ORDER BY location");
 while ($row = $locResult->fetch_assoc()) {
@@ -181,7 +207,7 @@ while ($row = $locResult->fetch_assoc()) {
 
                                     <form method="POST" class="mb-3">
                                         <input type="hidden" name="restaurant_id" value="<?php echo intval($restaurant['id']); ?>">
-        kolachi       <?php if (isFavoriteItem('restaurant', $restaurant['id'])): ?>
+                                        <?php if (isFavoriteItem('restaurant', $restaurant['id'])): ?>
                                             <button type="submit" name="favorite_action" value="remove" class="btn btn-outline-gold w-100 mb-2">Remove Favorite</button>
                                         <?php else: ?>
                                             <button type="submit" name="favorite_action" value="add" class="btn btn-gold w-100 mb-2">Add Favorite</button>
@@ -199,6 +225,28 @@ while ($row = $locResult->fetch_assoc()) {
                     <?php endwhile; ?>
 
                 </div>
+
+                <?php if (!empty($cafes)): ?>
+                    <div class="glass-card p-3 mb-4">
+                        <h5 class="mb-0"><?php echo count($cafes); ?> Cafe(s) also found in <?php echo htmlspecialchars($location); ?></h5>
+                    </div>
+                    <div class="row g-4 mb-4">
+                        <?php foreach ($cafes as $cafe): ?>
+                            <div class="col-md-6 col-xl-4">
+                                <div class="glass-card place-card">
+                                    <div class="restaurant-image" style="background-image: url('<?php echo !empty($cafe['image']) ? htmlspecialchars($cafe['image'], ENT_QUOTES) : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200'; ?>'); background-size: cover; background-position: center;"></div>
+                                    <div class="p-3">
+                                        <h5><?php echo htmlspecialchars($cafe['name']); ?></h5>
+                                        <div class="rating mb-2"><i class="fas fa-star"></i> <?php echo number_format($cafe['rating'], 1); ?></div>
+                                        <p class="small text-secondary mb-2"><?php echo htmlspecialchars($cafe['coffee_types']); ?></p>
+                                        <p class="small mb-2"><i class="fas fa-map-marker-alt"></i> <?php echo htmlspecialchars($cafe['location']); ?></p>
+                                        <a href="cafe.php?id=<?php echo intval($cafe['id']); ?>" class="btn btn-outline-gold w-100">View Cafe</a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
