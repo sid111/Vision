@@ -154,7 +154,7 @@ CREATE TABLE `restaurants` (
 --
 
 INSERT INTO `restaurants` (`id`, `name`, `description`, `address`, `location`, `cuisine`, `price_range`, `rating`, `opening_hours`, `phone`, `image`, `featured`, `created_at`) VALUES
-(1, 'Kolahi', 'Authentic Pakistani cuisine with stunning sea view at Do Darya. Famous for their BBQ platters and traditional Karahi.', 'Do Darya, Karachi', 'Do Darya', 'Pakistani, BBQ', '$$$', 4.7, '12:00 PM - 12:00 AM', '+92 21 111-123-456', 'kolahi.jpg', 1, '2026-06-03 21:10:05'),
+(1, 'Kolachi', 'Authentic Pakistani cuisine with stunning sea view at Do Darya. Famous for their BBQ platters and traditional Karahi.', 'Do Darya, Karachi', 'Do Darya', 'Pakistani, BBQ', '$$$', 4.7, '12:00 PM - 12:00 AM', '+92 21 111-123-456', 'kolachi.jpg', 1, '2026-06-03 21:10:05'),
 (2, 'BBQ Tonight', 'Karachi\'s most loved BBQ destination serving authentic grilled delicacies since 1992.', 'Gulshan-e-Iqbal, Karachi', 'Gulshan', 'BBQ, Pakistani', '$$', 4.6, '6:00 PM - 1:00 AM', '+92 21 111-234-567', 'bbq-tonight.jpg', 1, '2026-06-03 21:10:05'),
 (3, 'Al Bustan', 'Elegant Lebanese and Middle Eastern cuisine in the heart of Clifton.', 'Clifton, Karachi', 'Clifton', 'Lebanese, Middle Eastern', '$$$', 4.6, '12:00 PM - 11:00 PM', '+92 21 111-345-678', 'al-bustan.jpg', 1, '2026-06-03 21:10:05'),
 (4, 'Saltanat', 'Royal Mughlai cuisine experience fit for kings.', 'DHA Phase 8, Karachi', 'DHA', 'Mughlai, Pakistani', '$$$', 4.5, '1:00 PM - 12:00 AM', '+92 21 111-456-789', 'saltanat.jpg', 0, '2026-06-03 21:10:05'),

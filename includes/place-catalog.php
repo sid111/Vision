@@ -11,8 +11,8 @@ if (!function_exists('ff_get_restaurant_catalog')) {
     {
         $key = ff_slug($restaurantName);
         $catalogs = [
-            'kolahi' => [
-                'summary' => 'Kolahi is a sea-view Pakistani restaurant known for BBQ platters, handi, biryani and rich Karachi-style comfort food.',
+            'kolachi' => [
+                'summary' => 'Kolachi is a sea-view Pakistani restaurant known for BBQ platters, handi, biryani and rich Karachi-style comfort food.',
                 'hero_image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1800',
                 'location_image' => 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800',
                 'gallery_images' => [
