@@ -71,6 +71,7 @@ $featuredRestaurants = getFeaturedRestaurants($conn);
 $featuredCafes = getFeaturedCafes($conn);
 $foodStreets = getFoodStreets($conn);
 $recentReviews = getRecentReviews($conn);
+$locations = getLocations($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -104,39 +105,14 @@ $recentReviews = getRecentReviews($conn);
                 Explore 700+ top cafes, restaurants and famous food streets near you
             </p>
 
-            <!-- Location Quick Chips -->
-            <div class="d-flex flex-wrap justify-content-center gap-2 mb-5 animate-fade-up" style="animation-delay: 0.2s;">
-                <span class="location-badge" onclick="searchLocation('Burns Road')">
-                    <i class="fas fa-fire"></i> Burns Road
-                </span>
-                <span class="location-badge" onclick="searchLocation('Do Darya')">
-                    <i class="fas fa-water"></i> Do Darya
-                </span>
-                <span class="location-badge" onclick="searchLocation('Boat Basin')">
-                    <i class="fas fa-ship"></i> Boat Basin
-                </span>
-                <span class="location-badge" onclick="searchLocation('Hussainabad')">
-                    <i class="fas fa-drumstick-bite"></i> Hussainabad
-                </span>
-                <span class="location-badge" onclick="searchLocation('Bahadurabad')">
-                    <i class="fas fa-mug-hot"></i> Bahadurabad
-                </span>
-                <span class="location-badge" onclick="searchLocation('Zamzama')">
-                    <i class="fas fa-gem"></i> Zamzama
-                </span>
-            </div>
-
             <!-- Search Bar -->
             <div class="search-bar d-flex flex-wrap align-items-center justify-content-between w-75 mx-auto gap-2 animate-fade-up" style="animation-delay: 0.3s;">
                 <input type="text" id="searchInput" class="flex-grow-1" placeholder="Search for restaurant, cafe, or cuisine..." style="min-width: 200px;">
                 <select id="locationSelect" class="bg-transparent">
                     <option value="">📍 All Locations</option>
-                    <option value="Clifton">🌊 Clifton</option>
-                    <option value="DHA">✨ DHA</option>
-                    <option value="Gulshan">🌳 Gulshan</option>
-                    <option value="Do Darya">⛵ Do Darya</option>
-                    <option value="Bahadurabad">☕ Bahadurabad</option>
-                    <option value="Zamzama">💎 Zamzama</option>
+                    <?php foreach ($locations as $loc): ?>
+                        <option value="<?php echo htmlspecialchars($loc, ENT_QUOTES); ?>"><?php echo htmlspecialchars($loc); ?></option>
+                    <?php endforeach; ?>
                 </select>
                 <button class="search-btn btn-gold px-4" onclick="performSearch()">
                     <i class="fas fa-search me-2"></i> Find Food
@@ -287,9 +263,9 @@ $recentReviews = getRecentReviews($conn);
                                 <button type="submit" name="favorite_action" value="add" class="btn btn-gold w-100 mb-2">Add Favorite</button>
                             <?php endif; ?>
                         </form>
-                        <button class="btn btn-outline-gold btn-sm mt-2" onclick="searchLocation('<?php echo $street['name']; ?>')">
+                        <a href="food-street.php?id=<?php echo intval($street['id']); ?>" class="btn btn-outline-gold btn-sm mt-2">
                             Explore Food Street <i class="fas fa-arrow-right"></i>
-                        </button>
+                        </a>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -446,15 +422,20 @@ $recentReviews = getRecentReviews($conn);
             const searchTerm = document.getElementById('searchInput').value;
             const location = document.getElementById('locationSelect').value;
 
-            let url = 'restaurants.php?';
-            if (searchTerm) url += 'search=' + encodeURIComponent(searchTerm) + '&';
-            if (location) url += 'location=' + encodeURIComponent(location);
+            let url = 'search.php';
+            const params = [];
+            if (searchTerm) params.push('search=' + encodeURIComponent(searchTerm));
+            if (location) params.push('location=' + encodeURIComponent(location));
+            if (params.length === 0) {
+                params.push('submitted=1');
+            }
+            url += '?' + params.join('&');
 
-            window.location.href = url || 'restaurants.php';
+            window.location.href = url;
         }
 
         function searchLocation(location) {
-            window.location.href = 'restaurants.php?location=' + encodeURIComponent(location);
+            window.location.href = 'search.php?location=' + encodeURIComponent(location);
         }
 
         // Enter key search

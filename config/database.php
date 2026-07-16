@@ -83,16 +83,23 @@ function ensureDatabaseSchema($conn)
 
     $conn->query("CREATE TABLE IF NOT EXISTS reviews (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        user_id INT,
+        user_id INT NULL,
         restaurant_id INT NULL,
         cafe_id INT NULL,
+        food_street_id INT NULL,
         rating INT CHECK (rating >= 1 AND rating <= 5),
         comment TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (restaurant_id) REFERENCES restaurants(id) ON DELETE CASCADE,
-        FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE
+        FOREIGN KEY (cafe_id) REFERENCES cafes(id) ON DELETE CASCADE,
+        FOREIGN KEY (food_street_id) REFERENCES food_streets(id) ON DELETE CASCADE
     )");
+
+    $fieldExists = $conn->query("SHOW COLUMNS FROM reviews LIKE 'food_street_id'");
+    if (!$fieldExists || $fieldExists->num_rows === 0) {
+        $conn->query("ALTER TABLE reviews ADD COLUMN food_street_id INT NULL");
+    }
 
     $conn->query("CREATE TABLE IF NOT EXISTS favorites (
         id INT PRIMARY KEY AUTO_INCREMENT,
@@ -155,13 +162,46 @@ function ensureDefaultAdmin($conn)
 
 function ensureDefaultLocations($conn)
 {
-    $defaultLocations = ['Karachi', 'Clifton', 'DHA', 'Gulshan', 'Do Darya', 'Bahadurabad', 'Zamzama'];
+    $defaultLocations = ['Clifton', 'DHA', 'Gulshan', 'Do Darya', 'Bahadurabad', 'Zamzama'];
     foreach ($defaultLocations as $location) {
         $stmt = $conn->prepare("INSERT IGNORE INTO locations (name) VALUES (?)");
         $stmt->bind_param('s', $location);
         $stmt->execute();
         $stmt->close();
     }
+}
+
+function getLocations($conn)
+{
+    $locations = [];
+    $query = "SELECT DISTINCT location FROM (
+        SELECT location FROM restaurants
+        UNION ALL
+        SELECT location FROM cafes
+        UNION ALL
+        SELECT location FROM food_streets
+        UNION ALL
+        SELECT name as location FROM food_streets
+    ) AS all_locations
+    WHERE location <> 'Karachi'
+    ORDER BY FIELD(location, 'Burns Road', 'Do Darya', 'Boat Basin', 'Hussainabad', 'Bahadurabad', 'Zamzama', 'Clifton', 'DHA', 'Gulshan'), location";
+
+    $result = $conn->query($query);
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $location = trim($row['location']);
+            if ($location !== '') {
+                $locations[] = $location;
+            }
+        }
+    }
+
+    $locations = array_values(array_unique($locations));
+
+    if (empty($locations)) {
+        $locations = ['Burns Road', 'Do Darya', 'Boat Basin', 'Hussainabad', 'Bahadurabad', 'Zamzama'];
+    }
+    return $locations;
 }
 
 function refreshSiteStats($conn)
@@ -274,10 +314,12 @@ function getRecentReviews($conn, $limit = 6)
     $query = "SELECT r.*, u.name as user_name,
               CASE
                 WHEN r.restaurant_id IS NOT NULL THEN (SELECT name FROM restaurants WHERE id = r.restaurant_id)
-                ELSE (SELECT name FROM cafes WHERE id = r.cafe_id)
+                WHEN r.cafe_id IS NOT NULL THEN (SELECT name FROM cafes WHERE id = r.cafe_id)
+                WHEN r.food_street_id IS NOT NULL THEN (SELECT name FROM food_streets WHERE id = r.food_street_id)
+                ELSE 'Guest Review'
               END as place_name
               FROM reviews r
-              JOIN users u ON r.user_id = u.id
+              LEFT JOIN users u ON r.user_id = u.id
               ORDER BY r.created_at DESC LIMIT $limit";
     $result = $conn->query($query);
     $reviews = [];
@@ -285,16 +327,6 @@ function getRecentReviews($conn, $limit = 6)
         $reviews[] = $row;
     }
     return $reviews;
-}
-
-function getLocations($conn)
-{
-    $result = $conn->query("SELECT name FROM locations ORDER BY name");
-    $locations = [];
-    while ($row = $result->fetch_assoc()) {
-        $locations[] = $row['name'];
-    }
-    return $locations;
 }
 
 function initializeFavorites()
