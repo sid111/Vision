@@ -74,11 +74,7 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-$locations = [];
-$locResult = $conn->query("SELECT DISTINCT location FROM cafes ORDER BY location");
-while ($row = $locResult->fetch_assoc()) {
-    $locations[] = $row['location'];
-}
+$locations = getLocations($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">

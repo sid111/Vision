@@ -357,18 +357,18 @@ img {
 .contact-form textarea,
 .form-control,
 .form-select {
-    background: #11161d;
-    color: #fff;
-    border: 1px solid rgba(245, 176, 65, 0.22);
+    background: #3a4048 !important;
+    color: #fff !important;
+    border: 1px solid rgba(245, 176, 65, 0.22) !important;
     border-radius: 8px;
 }
 
 .form-control:focus,
 .form-select:focus {
-    background: #11161d;
-    color: #fff;
-    border-color: rgba(245, 176, 65, 0.7);
-    box-shadow: 0 0 0 0.18rem rgba(245, 176, 65, 0.12);
+    background: #3a4048 !important;
+    color: #fff !important;
+    border-color: rgba(245, 176, 65, 0.7) !important;
+    box-shadow: 0 0 0 0.18rem rgba(245, 176, 65, 0.12) !important;
 }
 
 .contact-form textarea {
@@ -502,7 +502,7 @@ body.food-detail-page {
 .form-control,
 .form-select,
 textarea.form-control {
-    background-color: #0f1318 !important;
+    background-color: #3a4048 !important;
     color: #fff !important;
     border: 1px solid rgba(245, 176, 65, 0.24) !important;
 }
@@ -512,6 +512,16 @@ textarea.form-control {
 textarea.form-control:focus {
     border-color: rgba(245, 176, 65, 0.75) !important;
     box-shadow: 0 0 0 0.18rem rgba(245, 176, 65, 0.14) !important;
+}
+
+.form-select option {
+    background-color: #3a4048 !important;
+    color: #fff !important;
+}
+
+.form-select option:checked {
+    background: linear-gradient(rgba(245, 176, 65, 0.3), rgba(245, 176, 65, 0.3)) #3a4048 !important;
+    background-color: #3a4048 !important;
 }
 
 .hero,

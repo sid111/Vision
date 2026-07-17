@@ -100,11 +100,7 @@ if (!empty($location)) {
     $cafeStmt->close();
 }
 
-$locations = [];
-$locResult = $conn->query("SELECT DISTINCT location FROM restaurants ORDER BY location");
-while ($row = $locResult->fetch_assoc()) {
-    $locations[] = $row['location'];
-}
+$locations = getLocations($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
