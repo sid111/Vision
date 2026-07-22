@@ -260,8 +260,15 @@ img {
 }
 
 .search-bar select option,
-.form-select option {
-    color: #111;
+.sidebar select option,
+.sidebar .form-select option,
+.glass-card select option,
+.form-select option,
+select option {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    font-weight: 600 !important;
+    padding: 10px !important;
 }
 
 .location-badge {
@@ -385,16 +392,35 @@ img {
 }
 
 .sidebar .form-control,
-.sidebar .form-select,
 .contact-form .form-control,
-.contact-form .form-select,
 .contact-form textarea,
-.form-control,
-.form-select {
+.form-control {
     background: #11161d;
     color: #fff;
     border: 1px solid rgba(245, 176, 65, 0.22);
     border-radius: 8px;
+}
+
+.sidebar select,
+.sidebar .form-select,
+.glass-card select,
+.glass-card .form-select,
+.contact-form select,
+.contact-form .form-select,
+select.form-select,
+.form-select {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    font-weight: 700 !important;
+    font-size: 0.95rem !important;
+    border: 2px solid #F5B041 !important;
+    border-radius: 8px !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23D4A017' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-position: right 0.75rem center !important;
+    background-size: 16px 12px !important;
+    background-repeat: no-repeat !important;
+    padding: 0.55rem 2.25rem 0.55rem 0.75rem !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
 .sidebar .form-control::placeholder,
@@ -544,11 +570,23 @@ body.food-detail-page {
 }
 
 .form-control,
-.form-select,
 textarea.form-control {
     background-color: #0f1318 !important;
     color: #fff !important;
     border: 1px solid rgba(245, 176, 65, 0.24) !important;
+}
+
+.sidebar select:focus,
+.sidebar .form-select:focus,
+.glass-card select:focus,
+.glass-card .form-select:focus,
+select.form-select:focus,
+.form-select:focus {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+    border-color: #E67E22 !important;
+    box-shadow: 0 0 0 0.2rem rgba(245, 176, 65, 0.35) !important;
+    outline: none !important;
 }
 
 .form-control::placeholder,
