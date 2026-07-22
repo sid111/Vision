@@ -188,21 +188,21 @@ if (!$place) {
 $stmt->close();
 
 if ($type === 'restaurant') {
-    $placeCatalog = ff_get_restaurant_catalog($place['name']);
+    $placeCatalog = ff_get_restaurant_catalog($place['name'], $place['image'] ?? '');
     $items = $placeCatalog['menu_items'];
     $placeMeta = $placeCatalog['summary'];
     $placeImage = $placeCatalog['hero_image'];
     $locationImage = $placeCatalog['location_image'] ?? $placeImage;
     $galleryImages = $placeCatalog['gallery_images'];
 } elseif ($type === 'cafe') {
-    $placeCatalog = ff_get_cafe_catalog($place['name']);
+    $placeCatalog = ff_get_cafe_catalog($place['name'], $place['image'] ?? '');
     $items = $placeCatalog['menu_items'];
     $placeMeta = $placeCatalog['summary'];
     $placeImage = $placeCatalog['hero_image'];
     $locationImage = $placeCatalog['location_image'] ?? $placeImage;
     $galleryImages = $placeCatalog['gallery_images'];
 } elseif ($type === 'street') {
-    $streetCatalog = ff_get_street_catalog($place['name'], $place['location']);
+    $streetCatalog = ff_get_street_catalog($place['name'], $place['location'], $place['image'] ?? '');
     $items = $streetCatalog['items'];
     $streetLabel = $streetCatalog['label'];
     $placeMeta = $streetCatalog['summary'];
@@ -563,8 +563,6 @@ $collectionMode = $type === 'street' && !empty($vendors);
 
 </html>
 <?php $conn->close(); ?>
-
-
 
 
 

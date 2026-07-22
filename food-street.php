@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $page_title = 'Food Street Details - FoodFinder Karachi';
 include 'config/database.php';
 include 'includes/food-catalog.php';
@@ -48,30 +48,8 @@ $reviews = [
     ['rating' => 5, 'comment' => 'Perfect late night spot for rolls, bun kabab and chaat.', 'created_at' => date('Y-m-d', strtotime('-1 week')), 'user_name' => 'Areeba Noor']
 ];
 
-$similarStreets = [];
-$similarStmt = $conn->prepare('SELECT * FROM food_streets WHERE id <> ? ORDER BY rating DESC LIMIT 4');
-$similarStmt->bind_param('i', $id);
-$similarStmt->execute();
-$similarResult = $similarStmt->get_result();
-while ($similar = $similarResult->fetch_assoc()) {
-    $similarStreets[] = $similar;
-}
-$similarStmt->close();
 $mapQuery = urlencode(trim($street['name'] . ' ' . $street['location']));
 
-$streetExplorerItems = array_map(function ($item) {
-    return [
-        'slug' => $item['slug'],
-        'tag' => $item['tag'],
-        'name' => $item['name'],
-        'description' => $item['description'],
-        'price' => $item['price'],
-        'rating' => $item['rating'],
-        'image' => $item['image'],
-        'vendors' => $item['vendors'] ?? []
-    ];
-}, $menuItems);
-$streetExplorerJson = json_encode($streetExplorerItems, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 $reviews = [];
 $reviewStmt = $conn->prepare('SELECT r.rating, r.comment, r.created_at, COALESCE(u.name, "Guest") AS user_name FROM reviews r LEFT JOIN users u ON r.user_id = u.id WHERE r.food_street_id = ? ORDER BY r.created_at DESC LIMIT 3');
@@ -154,43 +132,6 @@ if (empty($reviews)) {
                         </div>
                     </div>
                 </div>
-                <div class="rd-panel">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h2 class="rd-panel-title mb-0">Explore This Street</h2>
-                        <span class="rd-soft-link">Tap a category</span>
-                    </div>
-                    <div class="rd-tabs mb-3" id="streetExplorerTabs">
-                        <?php foreach ($menuItems as $index => $item): ?>
-                            <span class="<?php echo $index === 0 ? 'active' : ''; ?>" data-street-index="<?php echo $index; ?>" style="cursor:pointer;">
-                                <?php echo htmlspecialchars($item['tag']); ?>
-                            </span>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php $firstExplorer = $menuItems[0] ?? null; ?>
-                    <div class="rd-menu-card" id="streetExplorerCard" style="overflow:hidden;">
-                        <div class="rd-menu-image" id="streetExplorerImage"
-                            style="min-height:260px;background-image:url('<?php echo htmlspecialchars($firstExplorer['image'] ?? $locationImage, ENT_QUOTES); ?>');">
-                            <span class="rd-menu-tag" id="streetExplorerTag"><?php echo htmlspecialchars($firstExplorer['tag'] ?? 'Street'); ?></span>
-                        </div>
-                        <div class="rd-menu-body">
-                            <h4 id="streetExplorerName"><?php echo htmlspecialchars($firstExplorer['name'] ?? $street['name']); ?></h4>
-                            <p id="streetExplorerDescription"><?php echo htmlspecialchars($firstExplorer['description'] ?? $streetSummary); ?></p>
-                            <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
-                                <span class="rd-price" id="streetExplorerPrice"><?php echo htmlspecialchars($firstExplorer['price'] ?? 'From Rs. 0'); ?></span>
-                                <span style="color:#F5B041;font-weight:800;" id="streetExplorerRating"><i class="fas fa-star"></i> <?php echo isset($firstExplorer['rating']) ? number_format($firstExplorer['rating'], 1) : '0.0'; ?></span>
-                            </div>
-                            <div class="d-flex flex-wrap gap-2 mb-3" id="streetExplorerPoints">
-                                <?php foreach (($firstExplorer['vendors'] ?? []) as $vendor): ?>
-                                    <span class="rd-chip"><i class="fas fa-location-dot rd-icon"></i><?php echo htmlspecialchars($vendor['name']); ?></span>
-                                <?php endforeach; ?>
-                            </div>
-                            <a class="rd-soft-link" id="streetExplorerLink"
-                                href="<?php echo htmlspecialchars('food-detail.php?type=street&id=' . intval($street['id']) . '&item=' . urlencode($firstExplorer['slug'] ?? 'street-food')); ?>">
-                                Open details
-                            </a>
-                        </div>
-                    </div>
-                </div>
                 <div class="rd-panel" id="menu">
                     <h2 class="rd-panel-title">Popular Carts & Stalls</h2>
                     <div class="rd-tabs">
@@ -214,36 +155,6 @@ if (empty($reviews)) {
                         <?php endforeach; ?>
                     </div>
                 </div>
-                <div class="rd-panel">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h2 class="rd-panel-title mb-0">Gallery</h2><span class="rd-soft-link">View All</span>
-                    </div>
-                    <div class="rd-gallery">
-                        <?php foreach ($galleryImages as $image): ?>
-                            <div class="rd-gallery-tile" style="background-image: url('<?php echo htmlspecialchars($image, ENT_QUOTES); ?>');"></div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                <?php if (!empty($similarStreets)): ?>
-                    <div class="rd-panel">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h2 class="rd-panel-title mb-0">Similar Food Streets</h2><a href="food-streets.php" class="rd-soft-link">View All</a>
-                        </div>
-                        <div class="rd-similar-grid">
-                            <?php foreach ($similarStreets as $index => $similar): ?>
-                                <?php $similarImage = !empty($similar['image']) ? $similar['image'] : $galleryImages[$index % count($galleryImages)]; ?>
-                                <a class="rd-similar-item" href="food-street.php?id=<?php echo intval($similar['id']); ?>">
-                                    <span class="rd-similar-image" style="background-image: url('<?php echo htmlspecialchars($similarImage, ENT_QUOTES); ?>');"></span>
-                                    <span>
-                                        <h4><?php echo htmlspecialchars($similar['name']); ?></h4>
-                                        <span style="color:#F5B041"><i class="fas fa-star"></i> <?php echo number_format($similar['rating'], 1); ?></span>
-                                        <small class="d-block rd-muted"><?php echo htmlspecialchars($similar['famous_for']); ?></small>
-                                    </span>
-                                </a>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                <?php endif; ?>
             </section>
             <aside class="col-lg-4">
                 <div class="position-sticky" style="top:100px;">
@@ -294,43 +205,6 @@ if (empty($reviews)) {
             <p class="mb-1">FoodFinder Karachi</p><small>Discover street food destinations across Karachi.</small>
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        (function() {
-            const items = <?php echo $streetExplorerJson ?: '[]'; ?>;
-            const tabs = document.querySelectorAll('#streetExplorerTabs [data-street-index]');
-            const cardImage = document.getElementById('streetExplorerImage');
-            const cardTag = document.getElementById('streetExplorerTag');
-            const cardName = document.getElementById('streetExplorerName');
-            const cardDescription = document.getElementById('streetExplorerDescription');
-            const cardPrice = document.getElementById('streetExplorerPrice');
-            const cardRating = document.getElementById('streetExplorerRating');
-            const cardPoints = document.getElementById('streetExplorerPoints');
-            const cardLink = document.getElementById('streetExplorerLink');
-
-            if (!items.length || !tabs.length) return;
-
-            function renderItem(index) {
-                const item = items[index];
-                if (!item) return;
-                tabs.forEach((tab) => tab.classList.toggle('active', Number(tab.dataset.streetIndex) === index));
-                cardImage.style.backgroundImage = `url('${item.image}')`;
-                cardTag.textContent = item.tag || 'Street';
-                cardName.textContent = item.name || '';
-                cardDescription.textContent = item.description || '';
-                cardPrice.textContent = item.price || '';
-                cardRating.innerHTML = `<i class="fas fa-star"></i> ${Number(item.rating || 0).toFixed(1)}`;
-                cardPoints.innerHTML = (item.vendors || []).map((vendor) => `
-                    <span class="rd-chip"><i class="fas fa-location-dot rd-icon"></i>${vendor.name}</span>
-                `).join('');
-                cardLink.href = `food-detail.php?type=street&id=<?php echo intval($street['id']); ?>&item=${encodeURIComponent(item.slug || '')}`;
-            }
-
-            tabs.forEach((tab) => {
-                tab.addEventListener('click', () => renderItem(Number(tab.dataset.streetIndex)));
-            });
-        })();
-    </script>
 </body>
 
 </html>

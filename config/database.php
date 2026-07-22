@@ -176,30 +176,27 @@ function getLocations($conn)
     $locations = [];
     $query = "SELECT DISTINCT location FROM (
         SELECT location FROM restaurants
-        UNION
+        UNION ALL
         SELECT location FROM cafes
-        UNION
+        UNION ALL
         SELECT location FROM food_streets
-        UNION
+        UNION ALL
         SELECT name as location FROM food_streets
     ) AS all_locations
-    WHERE location <> 'Karachi' AND location IS NOT NULL
-    ORDER BY FIELD(LOWER(TRIM(REPLACE(REPLACE(LOWER(location), ' karachi', ''), ', karachi', ''))), 'burns road', 'do darya', 'boat basin', 'hussainabad', 'bahadurabad', 'zamzama', 'clifton', 'dha', 'gulshan'), location";
+    WHERE location <> 'Karachi'
+    ORDER BY FIELD(location, 'Burns Road', 'Do Darya', 'Boat Basin', 'Hussainabad', 'Bahadurabad', 'Zamzama', 'Clifton', 'DHA', 'Gulshan'), location";
 
     $result = $conn->query($query);
     if ($result) {
-        $seen = [];
         while ($row = $result->fetch_assoc()) {
             $location = trim($row['location']);
-            // Remove " Karachi", " karachi", ", Karachi", ", karachi" suffixes for normalization
-            $location_key = strtolower(preg_replace('/\s*,?\s*karachi\s*$/i', '', $location));
-
-            if ($location !== '' && !in_array($location_key, $seen)) {
+            if ($location !== '') {
                 $locations[] = $location;
-                $seen[] = $location_key;
             }
         }
     }
+
+    $locations = array_values(array_unique($locations));
 
     if (empty($locations)) {
         $locations = ['Burns Road', 'Do Darya', 'Boat Basin', 'Hussainabad', 'Bahadurabad', 'Zamzama'];

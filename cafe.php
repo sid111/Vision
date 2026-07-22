@@ -121,7 +121,7 @@ $menuItems = [
     ]
 ];
 
-$cafeCatalog = ff_get_cafe_catalog($cafe['name']);
+$cafeCatalog = ff_get_cafe_catalog($cafe['name'], $cafe['image'] ?? '');
 $heroImage = $cafeCatalog['hero_image'];
 $locationImage = $cafeCatalog['location_image'] ?? $heroImage;
 $galleryImages = !empty($cafeCatalog['gallery_images']) ? $cafeCatalog['gallery_images'] : $galleryImages;
@@ -160,6 +160,44 @@ while ($similar = $similarResult->fetch_assoc()) {
 }
 $similarStmt->close();
 $mapQuery = urlencode(trim($cafe['name'] . ' ' . $cafe['address'] . ' ' . $cafe['location']));
+
+function ff_cafe_detail_image($name, $imageName = '', $fallback = '')
+{
+    $slug = trim(strtolower(preg_replace('/[^a-z0-9]+/i', '-', (string) $name)), '-');
+    $images = [
+        'coffee-wagon' => 'assets/images/cafe 3.png',
+        'espresso' => 'assets/images/cafe 2.png',
+        'cafe-aylanto' => 'assets/images/cafe 5.png',
+        'ginoxy' => 'assets/images/cafe 8.png',
+        'evergreen-cafe' => 'assets/images/cafe 6.png',
+        'big-tree-house-cafe' => 'assets/images/cafe 4.png',
+        'cafe-flo' => 'assets/images/cafe 7.png',
+        'cote-rotie' => 'assets/images/cafe 1.png',
+    ];
+
+    $imageMap = [
+        'coffee-wagon.jpg' => 'coffee-wagon',
+        'espresso.jpg' => 'espresso',
+        'cafe-aylanto.jpg' => 'cafe-aylanto',
+        'ginoxy-cafe.jpg' => 'ginoxy',
+        'evergreen.jpg' => 'evergreen-cafe',
+        'big-tree.jpg' => 'big-tree-house-cafe',
+        'cafe-flo.jpg' => 'cafe-flo',
+        'cote-rotie.jpg' => 'cote-rotie',
+    ];
+
+    $imageKey = $slug;
+    $imageBase = strtolower(basename(str_replace('\\', '/', (string) $imageName)));
+    if ($imageBase !== '' && isset($imageMap[$imageBase])) {
+        $imageKey = $imageMap[$imageBase];
+    }
+
+    if (isset($images[$imageKey])) {
+        return str_replace(' ', '%20', $images[$imageKey]);
+    }
+
+    return !empty($fallback) ? $fallback : str_replace(' ', '%20', 'assets/images/cafe 1.png');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -236,7 +274,7 @@ $mapQuery = urlencode(trim($cafe['name'] . ' ' . $cafe['address'] . ' ' . $cafe[
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h2 class="rd-panel-title mb-0">Similar Cafes</h2><a href="cafes.php" class="rd-soft-link">View All</a>
                         </div>
-                        <div class="rd-similar-grid"><?php foreach ($similarCafes as $index => $similar): ?><?php $similarImage = !empty($similar['image']) ? $similar['image'] : $galleryImages[$index % count($galleryImages)]; ?><a class="rd-similar-item" href="cafe.php?id=<?php echo intval($similar['id']); ?>"><span class="rd-similar-image" style="background-image: url('<?php echo htmlspecialchars($similarImage, ENT_QUOTES); ?>');"></span><span>
+                                <div class="rd-similar-grid"><?php foreach ($similarCafes as $index => $similar): ?><?php $similarImage = ff_cafe_detail_image($similar['name'], $similar['image'] ?? '', $galleryImages[$index % count($galleryImages)]); ?><a class="rd-similar-item" href="cafe.php?id=<?php echo intval($similar['id']); ?>"><span class="rd-similar-image" style="background-image: url('<?php echo htmlspecialchars($similarImage, ENT_QUOTES); ?>');"></span><span>
                                     <h4><?php echo htmlspecialchars($similar['name']); ?></h4><span style="color:#F5B041"><i class="fas fa-star"></i> <?php echo number_format($similar['rating'], 1); ?></span><small class="d-block rd-muted"><?php echo htmlspecialchars($similar['coffee_types']); ?></small>
                                 </span></a><?php endforeach; ?></div>
                     </div><?php endif; ?>
