@@ -146,13 +146,20 @@ img {
     background: transparent;
     color: var(--gold);
 
-    padding: 10px 22px;    
-    min-height: 44px;       
-    min-width: 170px;       
-
+    padding: 10px 22px;
     border-radius: 8px;
     font-weight: 700;
     line-height: 1;
+    transition: 0.2s ease;
+}
+
+.btn-sm.btn-outline-gold,
+.btn-sm.btn-gold,
+.nav-auth-actions .btn {
+    min-width: auto !important;
+    min-height: auto !important;
+    padding: 8px 18px !important;
+    font-size: 0.88rem !important;
 }
 
 .btn-outline-gold:hover {
