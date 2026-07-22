@@ -24,6 +24,7 @@ if (!function_exists('ff_image_base')) {
         $path = basename(str_replace('\\', '/', $path));
         return preg_replace('/\.[^.]+$/', '', $path);
     }
+
 }
 
 if (!function_exists('ff_get_restaurant_catalog')) {
@@ -168,7 +169,7 @@ if (!function_exists('ff_get_restaurant_catalog')) {
             'ginsoy.jpg' => 'ginsoy',
         ];
 
-        $mediaKey = $localMedia[$key] ?? null;
+        $mediaKey = isset($localMedia[$key]) ? $key : null;
         if (!empty($imageName)) {
             $imageBase = ff_image_base($imageName);
             $imageLookup = $imageMap[$imageBase . '.jpg'] ?? ($imageMap[$imageBase] ?? null);
