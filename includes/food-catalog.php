@@ -7,7 +7,7 @@ if (!function_exists('ff_slug')) {
 }
 
 if (!function_exists('ff_get_street_catalog')) {
-    function ff_get_street_catalog($streetName, $streetLocation = '')
+    function ff_get_street_catalog($streetName, $streetLocation, $image = '')
     {
         $streetName = trim((string) $streetName);
         $streetLocation = trim((string) $streetLocation);

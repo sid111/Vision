@@ -165,7 +165,7 @@ $foodStreetPages = ['food-streets.php', 'food-street.php'];
     }
 </style>
 
-<nav class="navbar navbar-expand-xlgit remote -v fixed-top vision-site-nav">
+<nav class="navbar navbar-expand-xl vision-site-nav">
     <div class="container">
         <a class="navbar-brand" href="index.php" aria-label="FoodFinder Karachi home">
             <span class="brand-mark">V</span>
