@@ -100,7 +100,80 @@ if (!empty($location)) {
     $cafeStmt->close();
 }
 
-$locations = getLocations($conn);
+$locations = [];
+$locResult = $conn->query("SELECT DISTINCT location FROM restaurants ORDER BY location");
+while ($row = $locResult->fetch_assoc()) {
+    $locations[] = $row['location'];
+}
+
+if (!function_exists('ff_restaurant_list_image')) {
+    function ff_restaurant_list_image($name, $imageName = '', $fallback = '')
+    {
+        $slug = trim(strtolower(preg_replace('/[^a-z0-9]+/i', '-', (string) $name)), '-');
+        $images = [
+            'kolachi' => 'assets/images/restaurant 1.png',
+            'bbq-tonight' => 'assets/images/restaurant 2.png',
+            'al-bustan' => 'assets/images/restaurant 3.png',
+            'saltanat' => 'assets/images/restaurant 4.png',
+            'ginsoy' => 'assets/images/restaurant 5.png',
+        ];
+
+        $imageMap = [
+            'kolachi.jpg' => 'kolachi',
+            'bbq-tonight.jpg' => 'bbq-tonight',
+            'bbq tonight.jpg' => 'bbq-tonight',
+            'al-bustan.jpg' => 'al-bustan',
+            'saltanat.jpg' => 'saltanat',
+            'ginsoy.jpg' => 'ginsoy',
+        ];
+
+        $imageKey = $slug;
+        $imageBase = strtolower(basename(str_replace('\\', '/', (string) $imageName)));
+        if ($imageBase !== '' && isset($imageMap[$imageBase])) {
+            $imageKey = $imageMap[$imageBase];
+        }
+
+        $image = $images[$imageKey] ?? ($fallback ?: 'assets/images/restaurant 1.png');
+        return str_replace(' ', '%20', $image);
+    }
+}
+
+if (!function_exists('ff_cafe_list_image')) {
+    function ff_cafe_list_image($name, $imageName = '', $fallback = '')
+    {
+        $slug = trim(strtolower(preg_replace('/[^a-z0-9]+/i', '-', (string) $name)), '-');
+        $images = [
+            'coffee-wagon' => 'assets/images/cafe 3.png',
+            'espresso' => 'assets/images/cafe 2.png',
+            'cafe-aylanto' => 'assets/images/cafe 5.png',
+            'ginoxy' => 'assets/images/cafe 8.png',
+            'evergreen-cafe' => 'assets/images/cafe 6.png',
+            'big-tree-house-cafe' => 'assets/images/cafe 4.png',
+            'cafe-flo' => 'assets/images/cafe 7.png',
+            'cote-rotie' => 'assets/images/cafe 1.png',
+        ];
+
+        $imageMap = [
+            'coffee-wagon.jpg' => 'coffee-wagon',
+            'espresso.jpg' => 'espresso',
+            'cafe-aylanto.jpg' => 'cafe-aylanto',
+            'ginoxy-cafe.jpg' => 'ginoxy',
+            'evergreen.jpg' => 'evergreen-cafe',
+            'big-tree.jpg' => 'big-tree-house-cafe',
+            'cafe-flo.jpg' => 'cafe-flo',
+            'cote-rotie.jpg' => 'cote-rotie',
+        ];
+
+        $imageKey = $slug;
+        $imageBase = strtolower(basename(str_replace('\\', '/', (string) $imageName)));
+        if ($imageBase !== '' && isset($imageMap[$imageBase])) {
+            $imageKey = $imageMap[$imageBase];
+        }
+
+        $image = $images[$imageKey] ?? ($fallback ?: 'assets/images/cafe 1.png');
+        return str_replace(' ', '%20', $image);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -178,7 +251,7 @@ $locations = getLocations($conn);
                         <div class="col-md-6 col-xl-4">
                             <div class="glass-card restaurant-card">
 
-                                <div class="restaurant-image" style="background-image: url('<?php echo !empty($restaurant['image']) ? htmlspecialchars($restaurant['image'], ENT_QUOTES) : 'https://images.unsplash.com/photo-1529205274511-6f7d5a6d8f30?w=1200'; ?>'); background-size: cover; background-position: center;"></div>
+                                <div class="restaurant-image" style="background-image: url('<?php echo htmlspecialchars(ff_restaurant_list_image($restaurant['name'], $restaurant['image'] ?? '', $restaurant['image'] ?? ''), ENT_QUOTES); ?>'); background-size: cover; background-position: center;"></div>
 
                                 <div class="p-3">
                                     <h5><?php echo htmlspecialchars($restaurant['name']); ?></h5>
@@ -230,7 +303,7 @@ $locations = getLocations($conn);
                         <?php foreach ($cafes as $cafe): ?>
                             <div class="col-md-6 col-xl-4">
                                 <div class="glass-card place-card">
-                                    <div class="restaurant-image" style="background-image: url('<?php echo !empty($cafe['image']) ? htmlspecialchars($cafe['image'], ENT_QUOTES) : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200'; ?>'); background-size: cover; background-position: center;"></div>
+                                    <div class="restaurant-image" style="background-image: url('<?php echo htmlspecialchars(ff_cafe_list_image($cafe['name'], $cafe['image'] ?? '', $cafe['image'] ?? ''), ENT_QUOTES); ?>'); background-size: cover; background-position: center;"></div>
                                     <div class="p-3">
                                         <h5><?php echo htmlspecialchars($cafe['name']); ?></h5>
                                         <div class="rating mb-2"><i class="fas fa-star"></i> <?php echo number_format($cafe['rating'], 1); ?></div>

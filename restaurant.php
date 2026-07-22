@@ -107,7 +107,7 @@ $menuItems = [
     ]
 ];
 
-$placeCatalog = ff_get_restaurant_catalog($restaurant['name']);
+$placeCatalog = ff_get_restaurant_catalog($restaurant['name'], $restaurant['image'] ?? '');
 $heroImage = $placeCatalog['hero_image'];
 $locationImage = $placeCatalog['location_image'] ?? $heroImage;
 $galleryImages = !empty($placeCatalog['gallery_images']) ? $placeCatalog['gallery_images'] : $galleryImages;
@@ -150,6 +150,39 @@ $mapQuery = urlencode(trim($restaurant['name'] . ' ' . $restaurant['address'] . 
 function foodSlug($text)
 {
     return trim(strtolower(preg_replace('/[^a-z0-9]+/i', '-', $text)), '-');
+}
+
+function ff_restaurant_detail_image($name, $imageName = '', $fallback = '')
+{
+    $slug = foodSlug($name);
+    $images = [
+        'kolachi' => 'assets/images/restaurant 1.png',
+        'bbq-tonight' => 'assets/images/restaurant 2.png',
+        'al-bustan' => 'assets/images/restaurant 3.png',
+        'saltanat' => 'assets/images/restaurant 4.png',
+        'ginsoy' => 'assets/images/restaurant 5.png',
+    ];
+
+    $imageMap = [
+        'kolachi.jpg' => 'kolachi',
+        'bbq-tonight.jpg' => 'bbq-tonight',
+        'bbq tonight.jpg' => 'bbq-tonight',
+        'al-bustan.jpg' => 'al-bustan',
+        'saltanat.jpg' => 'saltanat',
+        'ginsoy.jpg' => 'ginsoy',
+    ];
+
+    $imageKey = $slug;
+    $imageBase = strtolower(basename(str_replace('\\', '/', (string) $imageName)));
+    if ($imageBase !== '' && isset($imageMap[$imageBase])) {
+        $imageKey = $imageMap[$imageBase];
+    }
+
+    if (isset($images[$imageKey])) {
+        return str_replace(' ', '%20', $images[$imageKey]);
+    }
+
+    return !empty($fallback) ? $fallback : str_replace(' ', '%20', 'assets/images/restaurant 1.png');
 }
 ?>
 <!DOCTYPE html>
@@ -433,6 +466,9 @@ function foodSlug($text)
         }
 
         .rd-menu-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
             overflow: hidden;
             border: 1px solid rgba(245, 176, 65, 0.18);
             border-radius: 8px;
@@ -441,7 +477,8 @@ function foodSlug($text)
 
         .rd-menu-image {
             position: relative;
-            min-height: 130px;
+            min-height: 0;
+            aspect-ratio: 16 / 10;
             background-size: cover;
             background-position: center;
         }
@@ -460,6 +497,9 @@ function foodSlug($text)
         }
 
         .rd-menu-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
             padding: 0.85rem;
         }
 
@@ -471,7 +511,8 @@ function foodSlug($text)
         }
 
         .rd-menu-body p {
-            min-height: 42px;
+            flex: 1;
+            min-height: 0;
             color: var(--rd-muted);
             font-size: 0.82rem;
             margin-bottom: 0.85rem;
@@ -516,6 +557,7 @@ function foodSlug($text)
         .rd-similar-item {
             display: grid;
             grid-template-columns: 72px 1fr;
+            align-items: stretch;
             gap: 0.75rem;
             color: inherit;
             text-decoration: none;
@@ -526,10 +568,21 @@ function foodSlug($text)
         }
 
         .rd-similar-image {
+            width: 72px;
             min-height: 72px;
+            height: 72px;
             border-radius: 7px;
             background-size: cover;
             background-position: center;
+        }
+
+        .rd-similar-item span:last-child {
+            min-width: 0;
+        }
+
+        .rd-similar-item h4,
+        .rd-similar-item small {
+            word-break: break-word;
         }
 
         .rd-similar-item h4 {
@@ -808,7 +861,7 @@ function foodSlug($text)
                         </div>
                         <div class="rd-similar-grid">
                             <?php foreach ($similarRestaurants as $index => $similar): ?>
-                                <?php $similarImage = !empty($similar['image']) ? $similar['image'] : $galleryImages[$index % count($galleryImages)]; ?>
+                                <?php $similarImage = ff_restaurant_detail_image($similar['name'], $similar['image'] ?? '', $galleryImages[$index % count($galleryImages)]); ?>
                                 <a class="rd-similar-item" href="restaurant.php?id=<?php echo intval($similar['id']); ?>">
                                     <span class="rd-similar-image" style="background-image: url('<?php echo htmlspecialchars($similarImage, ENT_QUOTES); ?>');"></span>
                                     <span>

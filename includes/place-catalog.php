@@ -6,8 +6,28 @@ if (!function_exists('ff_slug')) {
     }
 }
 
+if (!function_exists('ff_asset_image')) {
+    function ff_asset_image($path)
+    {
+        return str_replace(' ', '%20', 'assets/images/' . ltrim((string) $path, '/'));
+    }
+}
+
+if (!function_exists('ff_image_base')) {
+    function ff_image_base($path)
+    {
+        $path = strtolower(trim((string) $path));
+        if ($path === '') {
+            return '';
+        }
+
+        $path = basename(str_replace('\\', '/', $path));
+        return preg_replace('/\.[^.]+$/', '', $path);
+    }
+}
+
 if (!function_exists('ff_get_restaurant_catalog')) {
-    function ff_get_restaurant_catalog($restaurantName)
+    function ff_get_restaurant_catalog($restaurantName, $imageName = '')
     {
         $key = ff_slug($restaurantName);
         $catalogs = [
@@ -115,7 +135,49 @@ if (!function_exists('ff_get_restaurant_catalog')) {
             ]
         ];
 
-        return $catalogs[$key] ?? [
+        $localMedia = [
+            'kolachi' => [
+                'hero' => 'restaurant 1.png',
+                'location' => 'restaurant 1.png',
+            ],
+            'bbq-tonight' => [
+                'hero' => 'restaurant 2.png',
+                'location' => 'restaurant 2.png',
+            ],
+            'al-bustan' => [
+                'hero' => 'restaurant 3.png',
+                'location' => 'restaurant 3.png',
+            ],
+            'saltanat' => [
+                'hero' => 'restaurant 4.png',
+                'location' => 'restaurant 4.png',
+            ],
+            'ginsoy' => [
+                'hero' => 'restaurant 5.png',
+                'location' => 'restaurant 5.png',
+            ]
+        ];
+
+        $imageMap = [
+            'kolachi.jpg' => 'kolachi',
+            'bbq tonight.jpg' => 'bbq-tonight',
+            'bbq-tonight.jpg' => 'bbq-tonight',
+            'al bustan.jpg' => 'al-bustan',
+            'al-bustan.jpg' => 'al-bustan',
+            'saltanat.jpg' => 'saltanat',
+            'ginsoy.jpg' => 'ginsoy',
+        ];
+
+        $mediaKey = $localMedia[$key] ?? null;
+        if (!empty($imageName)) {
+            $imageBase = ff_image_base($imageName);
+            $imageLookup = $imageMap[$imageBase . '.jpg'] ?? ($imageMap[$imageBase] ?? null);
+            if ($imageLookup !== null && isset($localMedia[$imageLookup])) {
+                $mediaKey = $imageLookup;
+            }
+        }
+
+        $catalog = $catalogs[$key] ?? [
             'summary' => 'A curated restaurant menu built around the place you opened.',
             'hero_image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1800',
             'location_image' => 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800',
@@ -127,11 +189,18 @@ if (!function_exists('ff_get_restaurant_catalog')) {
             ],
             'menu_items' => []
         ];
+
+        if (isset($localMedia[$mediaKey])) {
+            $catalog['hero_image'] = ff_asset_image($localMedia[$mediaKey]['hero']);
+            $catalog['location_image'] = ff_asset_image($localMedia[$mediaKey]['location'] ?? $localMedia[$mediaKey]['hero']);
+        }
+
+        return $catalog;
     }
 }
 
 if (!function_exists('ff_get_cafe_catalog')) {
-    function ff_get_cafe_catalog($cafeName)
+    function ff_get_cafe_catalog($cafeName, $imageName = '')
     {
         $key = ff_slug($cafeName);
         $catalogs = [
@@ -289,7 +358,38 @@ if (!function_exists('ff_get_cafe_catalog')) {
             ]
         ];
 
-        return $catalogs[$key] ?? [
+        $localMedia = [
+            'coffee-wagon' => ['hero' => 'cafe 3.png', 'location' => 'cafe 3.png', 'gallery' => ['cafe 3.png', 'cafe 6.png', 'cafe 7.png', 'cafe 8.png']],
+            'espresso' => ['hero' => 'cafe 2.png', 'location' => 'cafe 2.png', 'gallery' => ['cafe 2.png', 'cafe 3.png', 'cafe 7.png', 'cafe 8.png']],
+            'cafe-aylanto' => ['hero' => 'cafe 5.png', 'location' => 'cafe 5.png', 'gallery' => ['cafe 5.png', 'cafe 6.png', 'cafe 7.png', 'cafe 8.png']],
+            'ginoxy' => ['hero' => 'cafe 8.png', 'location' => 'cafe 8.png', 'gallery' => ['cafe 8.png', 'cafe 2.png', 'cafe 3.png', 'cafe 5.png']],
+            'evergreen-cafe' => ['hero' => 'cafe 6.png', 'location' => 'cafe 6.png', 'gallery' => ['cafe 6.png', 'cafe 5.png', 'cafe 7.png', 'cafe 8.png']],
+            'big-tree-house-cafe' => ['hero' => 'cafe 4.png', 'location' => 'cafe 4.png', 'gallery' => ['cafe 4.png', 'cafe 6.png', 'cafe 7.png', 'cafe 8.png']],
+            'cafe-flo' => ['hero' => 'cafe 7.png', 'location' => 'cafe 7.png', 'gallery' => ['cafe 7.png', 'cafe 1.png', 'cafe 2.png', 'cafe 8.png']],
+            'cote-rotie' => ['hero' => 'cafe 1.png', 'location' => 'cafe 1.png', 'gallery' => ['cafe 1.png', 'cafe 2.png', 'cafe 3.png', 'cafe 4.png']]
+        ];
+
+        $imageMap = [
+            'coffee-wagon.jpg' => 'coffee-wagon',
+            'espresso.jpg' => 'espresso',
+            'cafe-aylanto.jpg' => 'cafe-aylanto',
+            'ginoxy-cafe.jpg' => 'ginoxy',
+            'evergreen.jpg' => 'evergreen-cafe',
+            'big-tree.jpg' => 'big-tree-house-cafe',
+            'cafe-flo.jpg' => 'cafe-flo',
+            'cote-rotie.jpg' => 'cote-rotie',
+        ];
+
+        $mediaKey = $localMedia[$key] ?? null;
+        if (!empty($imageName)) {
+            $imageBase = ff_image_base($imageName);
+            $imageLookup = $imageMap[$imageBase . '.jpg'] ?? null;
+            if ($imageLookup !== null && isset($localMedia[$imageLookup])) {
+                $mediaKey = $imageLookup;
+            }
+        }
+
+        $catalog = $catalogs[$key] ?? [
             'summary' => 'A curated cafe menu built around the place you opened.',
             'hero_image' => 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1800',
             'location_image' => 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1800',
@@ -301,5 +401,13 @@ if (!function_exists('ff_get_cafe_catalog')) {
             ],
             'menu_items' => []
         ];
+
+        if (isset($localMedia[$mediaKey])) {
+            $catalog['hero_image'] = ff_asset_image($localMedia[$mediaKey]['hero']);
+            $catalog['location_image'] = ff_asset_image($localMedia[$mediaKey]['location'] ?? $localMedia[$mediaKey]['hero']);
+            $catalog['gallery_images'] = array_map('ff_asset_image', $localMedia[$mediaKey]['gallery']);
+        }
+
+        return $catalog;
     }
 }

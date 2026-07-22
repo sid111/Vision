@@ -16,14 +16,14 @@ if (!function_exists('ff_get_street_catalog')) {
         $catalogs = [
             'burns-road' => [
                 'label' => 'Burns Road Food Street',
-                'hero_image' => 'https://images.unsplash.com/photo-1547592180-85f173990554?w=1800',
-                'location_image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1800',
+                'hero_image' => 'assets/images/buns%20rode.png',
+                'location_image' => 'assets/images/buns%20rode.png',
                 'gallery_images' => [
-                    'https://images.unsplash.com/photo-1541832676-0b6a1d6f4f3e?w=900',
-                    'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=900',
-                    'https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=900',
-                    'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=900',
-                    'https://images.unsplash.com/photo-1532634896-26909d0d7a1f?w=900'
+                    'assets/images/buns%20rode.png',
+                    'assets/images/buns%20rode.png',
+                    'assets/images/buns%20rode.png',
+                    'assets/images/buns%20rode.png',
+                    'assets/images/buns%20rode.png'
                 ],
                 'summary' => 'Burns Road is Karachi’s classic late-night food lane, known for nihari, biryani, rabri, tea, and family tables that stay busy well after dark.',
                 'items' => [
@@ -91,14 +91,14 @@ if (!function_exists('ff_get_street_catalog')) {
             ],
             'do-darya' => [
                 'label' => 'Do Darya Food Front',
-                'hero_image' => 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1800',
-                'location_image' => 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=1800',
+                'hero_image' => 'assets/images/dodariya.png',
+                'location_image' => 'assets/images/dodariya.png',
                 'gallery_images' => [
-                    'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900',
-                    'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=900',
-                    'https://images.unsplash.com/photo-1521316142018-22ed4b257ae5?w=900',
-                    'https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?w=900',
-                    'https://images.unsplash.com/photo-1544025162-d76694265947?w=900'
+                    'assets/images/dodariya.png',
+                    'assets/images/dodariya.png',
+                    'assets/images/dodariya.png',
+                    'assets/images/dodariya.png',
+                    'assets/images/dodariya.png'
                 ],
                 'summary' => 'Do Darya is the sea-view dining strip where seafood, grilled platters, continental dishes and sunset mocktails carry the evening.',
                 'items' => [
@@ -166,14 +166,14 @@ if (!function_exists('ff_get_street_catalog')) {
             ],
             'boat-basin' => [
                 'label' => 'Boat Basin Food Street',
-                'hero_image' => 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1800',
-                'location_image' => 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1800',
+                'hero_image' => 'assets/images/boatbasan.png',
+                'location_image' => 'assets/images/boatbasan.png',
                 'gallery_images' => [
-                    'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=900',
-                    'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=900',
-                    'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=900',
-                    'https://images.unsplash.com/photo-1512152272829-e3139592d56f?w=900',
-                    'https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=900'
+                    'assets/images/boatbasan.png',
+                    'assets/images/boatbasan.png',
+                    'assets/images/boatbasan.png',
+                    'assets/images/boatbasan.png',
+                    'assets/images/boatbasan.png'
                 ],
                 'summary' => 'Boat Basin is a busy all-evening food hub with burgers, rolls, fried snacks, shakes and big family platters.',
                 'items' => [
@@ -241,14 +241,14 @@ if (!function_exists('ff_get_street_catalog')) {
             ],
             'hussainabad' => [
                 'label' => 'Hussainabad Food Street',
-                'hero_image' => 'https://images.unsplash.com/photo-1529563021893-cc83c992d75d?w=1800',
-                'location_image' => 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=1800',
+                'hero_image' => 'assets/images/hussainabad.png',
+                'location_image' => 'assets/images/hussainabad.png',
                 'gallery_images' => [
-                    'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=900',
-                    'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?w=900',
-                    'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=900',
-                    'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=900',
-                    'https://images.unsplash.com/photo-1544025162-d76694265947?w=900'
+                    'assets/images/hussainabad.png',
+                    'assets/images/hussainabad.png',
+                    'assets/images/hussainabad.png',
+                    'assets/images/hussainabad.png',
+                    'assets/images/hussainabad.png'
                 ],
                 'summary' => 'Hussainabad comes alive at night with chana chaat, BBQ, rolls, kulfi and plenty of quick stalls for the rush hours.',
                 'items' => [
@@ -316,14 +316,14 @@ if (!function_exists('ff_get_street_catalog')) {
             ],
             'bahadurabad' => [
                 'label' => 'Bahadurabad Food Street',
-                'hero_image' => 'https://images.unsplash.com/photo-1514326640560-7d063ef2aed5?w=1800',
-                'location_image' => 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=1800',
+                'hero_image' => 'assets/images/bahadurabad.png',
+                'location_image' => 'assets/images/bahadurabad.png',
                 'gallery_images' => [
-                    'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=900',
-                    'https://images.unsplash.com/photo-1631515242808-497c3fbd3972?w=900',
-                    'https://images.unsplash.com/photo-1559847844-5315695dadae?w=900',
-                    'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=900',
-                    'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=900'
+                    'assets/images/bahadurabad.png',
+                    'assets/images/bahadurabad.png',
+                    'assets/images/bahadurabad.png',
+                    'assets/images/bahadurabad.png',
+                    'assets/images/bahadurabad.png'
                 ],
                 'summary' => 'Bahadurabad is a dependable food stop for bun kabab, burgers, biryani, sweets and family-friendly evening snacks.',
                 'items' => [
@@ -391,14 +391,14 @@ if (!function_exists('ff_get_street_catalog')) {
             ],
             'zamzama' => [
                 'label' => 'Zamzama Food Street',
-                'hero_image' => 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1800',
-                'location_image' => 'https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=1800',
+                'hero_image' => 'assets/images/zamzama.png',
+                'location_image' => 'assets/images/zamzama.png',
                 'gallery_images' => [
-                    'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=900',
-                    'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900',
-                    'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=900',
-                    'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=900',
-                    'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=900'
+                    'assets/images/zamzama.png',
+                    'assets/images/zamzama.png',
+                    'assets/images/zamzama.png',
+                    'assets/images/zamzama.png',
+                    'assets/images/zamzama.png'
                 ],
                 'summary' => 'Zamzama mixes upscale dessert bars, coffee counters, small gourmet bites and late-night snack carts in a polished dining strip.',
                 'items' => [

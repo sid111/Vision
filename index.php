@@ -1,6 +1,7 @@
 <?php
 $page_title = "FoodFinder Karachi - Discover Best Cafes & Restaurants";
 include 'config/database.php';
+include 'includes/food-catalog.php';
 $conn = getConnection();
 
 $favoriteAdded = false;
@@ -81,7 +82,7 @@ $locations = getLocations($conn);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $page_title; ?></title>
 
-    <!-- Bootstrap 5 + Icons + Fonts -->
+   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -95,7 +96,7 @@ $locations = getLocations($conn);
 
     <div style="height: 76px;"></div>
 
-    <!-- Hero Section with Beautiful Image -->
+    <!-- Hero Section  -->
     <section class="hero">
         <div class="container text-center">
             <h1 class="hero-title mb-3 animate-fade-up">
@@ -246,10 +247,11 @@ $locations = getLocations($conn);
             ];
             foreach ($foodStreets as $street):
             ?>
-                <div class="col-md-4">
-                    <div class="glass-card food-street-card p-4 text-center"
-                        style="background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800'); background-size: cover; background-position: center;">
-                        <i class="fas fa-<?php echo $streetIcons[$street['name']] ?? 'location-dot'; ?> fa-2x mb-2" style="color: var(--gold);"></i>
+<div class="col-md-4">
+                    <?php $streetCatalog = ff_get_street_catalog($street['name'], $street['location']); ?>
+                    <div class="glass-card food-street-card p-4 text-center" 
+                        style="background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.5)), url('<?php echo htmlspecialchars($streetCatalog['hero_image'] ?? '', ENT_QUOTES); ?>'); background-size: cover; background-position: center;">
+<i class="fas fa-<?php echo $streetIcons[$street['name']] ?? 'location-dot'; ?> fa-2x mb-2" style="color: var(--gold);"></i>
                         <h4 class="fw-bold"><?php echo htmlspecialchars($street['name']); ?></h4>
                         <p class="small text-light"><?php echo htmlspecialchars($street['location']); ?></p>
                         <div class="rating mb-2">⭐ <?php echo number_format($street['rating'], 1); ?></div>
@@ -476,16 +478,29 @@ $locations = getLocations($conn);
             observer.observe(card);
         });
 
-        // Parallax effect for hero section
-        window.addEventListener('scroll', function() {
-            const scrolled = window.pageYOffset;
+        // Parallax effect for hero section (rAF throttled for smoothness)
+        (function() {
             const hero = document.querySelector('.hero');
-            if (hero) {
-                hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
+            if (!hero) return;
+            let lastScroll = 0;
+            let ticking = false;
+
+            function update() {
+                hero.style.backgroundPosition = 'center ' + (lastScroll * 0.5) + 'px';
+                ticking = false;
             }
-        });
+
+            window.addEventListener('scroll', function() {
+                lastScroll = window.pageYOffset || document.documentElement.scrollTop;
+                if (!ticking) {
+                    window.requestAnimationFrame(update);
+                    ticking = true;
+                }
+            }, { passive: true });
+        })();
     </script>
 </body>
 
 </html>
 <?php $conn->close(); ?>
+
