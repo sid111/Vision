@@ -413,3 +413,142 @@ function isFavoriteItem($type, $id)
     initializeFavorites();
     return isset($_SESSION['favorites'][$type . ':' . $id]);
 }
+
+if (!function_exists('ff_restaurant_list_image')) {
+    function ff_restaurant_list_image($name, $imageName = '', $fallback = '')
+    {
+        $slug = trim(strtolower(preg_replace('/[^a-z0-9]+/i', '-', (string) $name)), '-');
+        $nameMap = [
+            'kolachi' => 'assets/images/restaurant 1.png',
+            'bbq-tonight' => 'assets/images/restaurant 2.png',
+            'al-bustan' => 'assets/images/restaurant 3.png',
+            'saltanat' => 'assets/images/restaurant 4.png',
+            'ginsoy' => 'assets/images/restaurant 5.png',
+        ];
+        $fileMap = [
+            'kolachi.jpg' => 'assets/images/restaurant 1.png',
+            'bbq-tonight.jpg' => 'assets/images/restaurant 2.png',
+            'bbq tonight.jpg' => 'assets/images/restaurant 2.png',
+            'al-bustan.jpg' => 'assets/images/restaurant 3.png',
+            'saltanat.jpg' => 'assets/images/restaurant 4.png',
+            'ginsoy.jpg' => 'assets/images/restaurant 5.png',
+        ];
+
+        if (!empty($imageName)) {
+            if (preg_match('/^(https?:\/\/|\/\/|data:)/i', $imageName)) {
+                return $imageName;
+            }
+            if (strpos($imageName, 'assets/') === 0) {
+                return str_replace(' ', '%20', $imageName);
+            }
+            $base = strtolower(basename(str_replace('\\', '/', (string)$imageName)));
+            if (isset($fileMap[$base])) {
+                return str_replace(' ', '%20', $fileMap[$base]);
+            }
+            if (file_exists(__DIR__ . '/../assets/images/' . $base)) {
+                return str_replace(' ', '%20', 'assets/images/' . $base);
+            }
+        }
+
+        if (isset($nameMap[$slug])) {
+            return str_replace(' ', '%20', $nameMap[$slug]);
+        }
+
+        return str_replace(' ', '%20', $fallback ?: ($nameMap['kolachi'] ?? 'assets/images/restaurant 1.png'));
+    }
+}
+
+if (!function_exists('ff_cafe_list_image')) {
+    function ff_cafe_list_image($name, $imageName = '', $fallback = '')
+    {
+        $slug = trim(strtolower(preg_replace('/[^a-z0-9]+/i', '-', (string) $name)), '-');
+        $nameMap = [
+            'coffee-wagon' => 'assets/images/cafe 3.png',
+            'espresso' => 'assets/images/cafe 2.png',
+            'cafe-aylanto' => 'assets/images/cafe 5.png',
+            'ginoxy' => 'assets/images/cafe 8.png',
+            'evergreen-cafe' => 'assets/images/cafe 6.png',
+            'big-tree-house-cafe' => 'assets/images/cafe 4.png',
+            'cafe-flo' => 'assets/images/cafe 7.png',
+            'cote-rotie' => 'assets/images/cafe 1.png',
+        ];
+        $fileMap = [
+            'coffee-wagon.jpg' => 'assets/images/cafe 3.png',
+            'espresso.jpg' => 'assets/images/cafe 2.png',
+            'cafe-aylanto.jpg' => 'assets/images/cafe 5.png',
+            'ginoxy-cafe.jpg' => 'assets/images/cafe 8.png',
+            'evergreen.jpg' => 'assets/images/cafe 6.png',
+            'big-tree.jpg' => 'assets/images/cafe 4.png',
+            'cafe-flo.jpg' => 'assets/images/cafe 7.png',
+            'cote-rotie.jpg' => 'assets/images/cafe 1.png',
+        ];
+
+        if (!empty($imageName)) {
+            if (preg_match('/^(https?:\/\/|\/\/|data:)/i', $imageName)) {
+                return $imageName;
+            }
+            if (strpos($imageName, 'assets/') === 0) {
+                return str_replace(' ', '%20', $imageName);
+            }
+            $base = strtolower(basename(str_replace('\\', '/', (string)$imageName)));
+            if (isset($fileMap[$base])) {
+                return str_replace(' ', '%20', $fileMap[$base]);
+            }
+            if (file_exists(__DIR__ . '/../assets/images/' . $base)) {
+                return str_replace(' ', '%20', 'assets/images/' . $base);
+            }
+        }
+
+        if (isset($nameMap[$slug])) {
+            return str_replace(' ', '%20', $nameMap[$slug]);
+        }
+
+        return str_replace(' ', '%20', $fallback ?: ($nameMap['cote-rotie'] ?? 'assets/images/cafe 1.png'));
+    }
+}
+
+if (!function_exists('ff_street_list_image')) {
+    function ff_street_list_image($name, $imageName = '', $fallback = '')
+    {
+        $slug = trim(strtolower(preg_replace('/[^a-z0-9]+/i', '-', (string) $name)), '-');
+        $nameMap = [
+            'burns-road' => 'assets/images/buns%20rode.png',
+            'do-darya' => 'assets/images/dodariya.png',
+            'boat-basin' => 'assets/images/boatbasan.png',
+            'hussainabad' => 'assets/images/hussainabad.png',
+            'bahadurabad' => 'assets/images/bahadurabad.png',
+            'zamzama' => 'assets/images/zamzama.png',
+        ];
+        $fileMap = [
+            'burns-road.jpg' => 'assets/images/buns%20rode.png',
+            'do-darya.jpg' => 'assets/images/dodariya.png',
+            'boat-basin.jpg' => 'assets/images/boatbasan.png',
+            'hussainabad.jpg' => 'assets/images/hussainabad.png',
+            'bahadurabad.jpg' => 'assets/images/bahadurabad.png',
+            'zamzama.jpg' => 'assets/images/zamzama.png',
+        ];
+
+        if (!empty($imageName)) {
+            if (preg_match('/^(https?:\/\/|\/\/|data:)/i', $imageName)) {
+                return $imageName;
+            }
+            if (strpos($imageName, 'assets/') === 0) {
+                return str_replace(' ', '%20', $imageName);
+            }
+            $base = strtolower(basename(str_replace('\\', '/', (string)$imageName)));
+            if (isset($fileMap[$base])) {
+                return str_replace(' ', '%20', $fileMap[$base]);
+            }
+            if (file_exists(__DIR__ . '/../assets/images/' . $base)) {
+                return str_replace(' ', '%20', 'assets/images/' . $base);
+            }
+        }
+
+        if (isset($nameMap[$slug])) {
+            return str_replace(' ', '%20', $nameMap[$slug]);
+        }
+
+        return str_replace(' ', '%20', $fallback ?: ($nameMap['burns-road'] ?? 'assets/images/buns%20rode.png'));
+    }
+}
+

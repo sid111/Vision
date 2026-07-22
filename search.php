@@ -136,7 +136,7 @@ if (isset($_GET['submitted']) || $search || $location) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/style.css?v=20260712">
+    <link rel="stylesheet" href="assets/style.css?v=20260722_v3">
 </head>
 
 <body>
@@ -190,7 +190,7 @@ if (isset($_GET['submitted']) || $search || $location) {
                             <?php foreach ($restaurantResults as $restaurant): ?>
                                 <div class="col-md-6 col-xl-4">
                                     <div class="glass-card restaurant-card">
-                                        <div class="restaurant-image" style="background-image: url('<?php echo !empty($restaurant['image']) ? htmlspecialchars($restaurant['image'], ENT_QUOTES) : 'https://images.unsplash.com/photo-1529205274511-6f7d5a6d8f30?w=1200'; ?>'); background-size: cover; background-position: center;"></div>
+                                        <div class="restaurant-image" style="background-image: url('<?php echo htmlspecialchars(ff_restaurant_list_image($restaurant['name'], $restaurant['image'] ?? ''), ENT_QUOTES); ?>'); background-size: cover; background-position: center;"></div>
                                         <div class="p-3">
                                             <h5><?php echo htmlspecialchars($restaurant['name']); ?></h5>
                                             <div class="rating mb-2"><i class="fas fa-star"></i> <?php echo number_format($restaurant['rating'], 1); ?></div>
@@ -210,7 +210,7 @@ if (isset($_GET['submitted']) || $search || $location) {
                             <?php foreach ($cafeResults as $cafe): ?>
                                 <div class="col-md-6 col-xl-4">
                                     <div class="glass-card place-card">
-                                        <div class="restaurant-image" style="background-image: url('<?php echo !empty($cafe['image']) ? htmlspecialchars($cafe['image'], ENT_QUOTES) : 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200'; ?>'); background-size: cover; background-position: center;"></div>
+                                        <div class="restaurant-image" style="background-image: url('<?php echo htmlspecialchars(ff_cafe_list_image($cafe['name'], $cafe['image'] ?? ''), ENT_QUOTES); ?>'); background-size: cover; background-position: center;"></div>
                                         <div class="p-3">
                                             <h5><?php echo htmlspecialchars($cafe['name']); ?></h5>
                                             <div class="rating mb-2"><i class="fas fa-star"></i> <?php echo number_format($cafe['rating'], 1); ?></div>
@@ -230,7 +230,7 @@ if (isset($_GET['submitted']) || $search || $location) {
                             <?php foreach ($streetResults as $street): ?>
                                 <div class="col-md-6 col-xl-4">
                                     <div class="glass-card food-street-card">
-                                        <div class="restaurant-image" style="background-image: url('<?php echo !empty($street['image']) ? htmlspecialchars($street['image'], ENT_QUOTES) : 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=800'; ?>'); background-size: cover; background-position: center;"></div>
+                                        <div class="restaurant-image" style="background-image: url('<?php echo htmlspecialchars(ff_street_list_image($street['name'], $street['image'] ?? ''), ENT_QUOTES); ?>'); background-size: cover; background-position: center;"></div>
                                         <div class="p-3">
                                             <h5><?php echo htmlspecialchars($street['name']); ?></h5>
                                             <div class="rating mb-2"><i class="fas fa-star"></i> <?php echo number_format($street['rating'], 1); ?></div>
